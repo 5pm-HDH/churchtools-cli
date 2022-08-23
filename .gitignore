@@ -1,0 +1,15 @@
+# ignore composer dependencies
+/vendor/
+composer.phar
+
+# ignore testdata with credentials
+/tests/integration/testdata.ini
+
+# ignore ide configuration
+.idea/
+
+# ignore phpunit-cache
+.phpunit.result.cache
+
+# ignore log-files
+*.log

@@ -1,0 +1,136 @@
+<?php
+
+
+namespace CTExport\Commands\Collections;
+
+
+use CTApi\Models\Event;
+use CTApi\Models\Song;
+use CTApi\Requests\EventRequest;
+use CTApi\Requests\ServiceRequest;
+use Symfony\Component\Console\Helper\ProgressBar;
+
+class EventCollection
+{
+    private array $events = [];
+
+    public function __construct(array $events)
+    {
+        $this->events = $events;
+    }
+
+    public function createSongTable(?ProgressBar $progressBar = null): SpreadsheetBuilder
+    {
+        return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($progressBar) {
+            if ($progressBar != null) {
+                $progressBar->advance();
+            }
+            $songs = $event->requestAgenda()->getSongs();
+            return array_map(function (Song $song) {
+                return $song->getName();
+            }, $songs);
+        });
+    }
+
+    public function createServicePersonTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetBuilder
+    {
+        return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($serviceIds, $progressBar) {
+            if ($progressBar != null) {
+                $progressBar->advance();
+            }
+            $names = [];
+
+            $event = EventRequest::findOrFail($event->getId()); // reload all events to get Service-Information.
+
+            foreach ($serviceIds as $serviceId) {
+                $eventService = $event->requestEventServiceWithServiceId($serviceId);
+                $person = $eventService?->requestPerson();
+                if (!is_null($person)) {
+                    $names[] = $person->getFirstName() . " " . $person->getLastName();
+                }
+            }
+            return $names;
+        });
+    }
+
+    public function createServiceInstrumentTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetBuilder
+    {
+        return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($serviceIds, $progressBar) {
+            if ($progressBar != null) {
+                $progressBar->advance();
+            }
+            $services = [];
+            foreach ($serviceIds as $serviceId) {
+                $eventService = $event->requestEventServiceWithServiceId($serviceId);
+                if ($eventService != null && $eventService->getPerson() != null) {
+                    $serviceId = $eventService->getServiceId();
+                    $services[] = ServiceRequest::find($serviceId)->getName();
+                }
+            }
+            return $services;
+        });
+    }
+
+
+    /**
+     * DataCollector is a callback, that takes a Event as parameter and returns an array of strings.
+     *
+     * @param $dataCollector
+     */
+    private function collectDataAndCreateSpreadsheetBuilder($dataCollector): SpreadsheetBuilder
+    {
+        $data = [];
+        foreach ($this->events as $event) {
+            $eventKey = $this->createKeyForEvent($event);
+            $data[$eventKey] = $dataCollector($event);
+        }
+        return $this->createSpreadsheetBuilderFromData($data);
+    }
+
+    private function createKeyForEvent(Event $event): string
+    {
+        return $event->getName() . " " . $event->getStartDate() . "(#" . $event->getId() . ")";
+    }
+
+    /**
+     * Contains Data to be formatted as Table. Input-Data
+     * <code>
+     * [
+     *    "Event A" => ["Matthew", "John"],
+     *    "Event B" => ["John", "Paul"]
+     * ]
+     * </code>
+     *
+     * Will create a Table:
+     * <code>
+     * [
+     *      ["",        "Matthew", "John", "Paul"],
+     *      ["Event A", "X",       "X",     ""],
+     *      ["Event B", "",        "X",     ""]
+     * ]
+     * </code>
+     * @param array $data
+     */
+    private function createSpreadsheetBuilderFromData(array $data): SpreadsheetBuilder
+    {
+        return new SpreadsheetBuilder($data);
+    }
+
+    public static function flipTable(array $table)
+    {
+        $oldY = sizeof($table);
+        $oldX = sizeof(end($table));
+
+        $flippedTable = [];
+
+        for ($newY = 0; $newY < $oldX; $newY++) {
+            $newRow = [];
+
+            for ($newX = 0; $newX < $oldY; $newX++) {
+                $newRow[] = $table[$newX][$newY];
+            }
+            $flippedTable[] = $newRow;
+        }
+        return $flippedTable;
+    }
+}
