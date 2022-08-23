@@ -1,20 +1,23 @@
 <?php
 
 
-namespace CTExport\Commands;
+namespace CTExport\Commands\TemplateCommands;
 
-use CTExport\ApplicationSettings;
+
+use CTExport\Commands\AbstractCommand;
+use CTExport\ExportTemplate\ExportTemplate;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 #[AsCommand(
-    name: 'settings:clear',
-    description: 'Clear all ChurchTools-API Settings.',
+    name: 'template:clear',
+    description: 'Delete all export-templates.',
     hidden: false,
 )]
-class SettingsClearCommand extends AbstractCommand
+class TemplateClearCommand extends AbstractCommand
 {
     protected function doSetupChurchToolsApi(): bool
     {
@@ -23,12 +26,8 @@ class SettingsClearCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $settings = ApplicationSettings::loadSettings();
-        foreach ($settings as $key => $value) {
-            $settings[$key] = null;
-        }
-        ApplicationSettings::saveSettings($settings);
-        $output->writeln("Cleared Settings.");
+        $numberOfTemplates = ExportTemplate::clearTemplates();
+        $output->writeln("Removed " . $numberOfTemplates . " Templates.");
 
         return Command::SUCCESS;
     }

@@ -1,9 +1,10 @@
 <?php
 
 
-namespace CTExport\Commands;
+namespace CTExport\Commands\TemplateCommands;
 
 
+use CTExport\Commands\AbstractCommand;
 use CTExport\ExportTemplate\ExportTemplate;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

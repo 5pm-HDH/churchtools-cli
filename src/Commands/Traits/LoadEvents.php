@@ -5,12 +5,19 @@ namespace CTExport\Commands\Traits;
 
 
 use CTApi\Requests\EventRequest;
+use CTApi\Requests\PersonRequest;
+use CTApi\Requests\SongRequest;
 
 trait LoadEvents
 {
     protected function loadEvents(string $startDate, string $endDate): array
     {
         return EventRequest::where("from", $startDate)->where("to", $endDate)->get();
+    }
+
+    protected function loadMyEvents(): array
+    {
+        return PersonRequest::whoami()?->requestEvents()->get() ?? [];
     }
 
     protected function loadEventsForCalendar(string $startDate, string $endDate, array $calendarIds): array
@@ -21,4 +28,15 @@ trait LoadEvents
             return is_null($calId) ? false : in_array($calId, $calendarIds);
         }));
     }
+
+    protected function loadSongs(): array
+    {
+        return SongRequest::all();
+    }
+
+    protected function loadSongsWithTitle(string $title): array
+    {
+        return SongRequest::where("name", $title)->get();
+    }
+
 }

@@ -1,8 +1,8 @@
 {
-  "name": "5pm-hdh/churchtools-export",
+  "name": "5pm-hdh/churchtools-cli",
   "type": "project",
   "require": {
-    "5pm-hdh/churchtools-api": "^1.3",
+    "5pm-hdh/churchtools-api": "dev-master",
     "symfony/console": "^6.0",
     "phpoffice/phpspreadsheet": "^1.24"
   },
@@ -18,7 +18,13 @@
         "src/"
     ]
   },
+  "scripts": {
+    "bundle-phar": "vendor/bin/phar-composer build ./ ct.phar && php ct.phar settings:clear && php ct.phar template:clear",
+    "bundle-phar-w": "vendor\\bin\\phar-composer.bat build ./ ct.phar  && php ct.phar settings:clear && php ct.phar template:clear"
+  },
+  "bin": ["ct"],
   "require-dev": {
-    "phpunit/phpunit": "^9.5"
+    "phpunit/phpunit": "^9.5",
+    "clue/phar-composer": "^1.4"
   }
 }

@@ -19,7 +19,7 @@ class EventCollection
         $this->events = $events;
     }
 
-    public function createSongTable(?ProgressBar $progressBar = null): SpreadsheetBuilder
+    public function createSongTable(?ProgressBar $progressBar = null): SpreadsheetDataBuilder
     {
         return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($progressBar) {
             if ($progressBar != null) {
@@ -32,7 +32,7 @@ class EventCollection
         });
     }
 
-    public function createServicePersonTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetBuilder
+    public function createServicePersonTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetDataBuilder
     {
         return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($serviceIds, $progressBar) {
             if ($progressBar != null) {
@@ -53,7 +53,7 @@ class EventCollection
         });
     }
 
-    public function createServiceInstrumentTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetBuilder
+    public function createServiceInstrumentTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetDataBuilder
     {
         return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($serviceIds, $progressBar) {
             if ($progressBar != null) {
@@ -77,7 +77,7 @@ class EventCollection
      *
      * @param $dataCollector
      */
-    private function collectDataAndCreateSpreadsheetBuilder($dataCollector): SpreadsheetBuilder
+    private function collectDataAndCreateSpreadsheetBuilder($dataCollector): SpreadsheetDataBuilder
     {
         $data = [];
         foreach ($this->events as $event) {
@@ -111,9 +111,9 @@ class EventCollection
      * </code>
      * @param array $data
      */
-    private function createSpreadsheetBuilderFromData(array $data): SpreadsheetBuilder
+    private function createSpreadsheetBuilderFromData(array $data): SpreadsheetDataBuilder
     {
-        return new SpreadsheetBuilder($data);
+        return new SpreadsheetDataBuilder($data);
     }
 
     public static function flipTable(array $table)

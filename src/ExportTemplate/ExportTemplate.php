@@ -6,6 +6,8 @@ use InvalidArgumentException;
 
 class ExportTemplate
 {
+    public const COMMAND_OPTION_ADD_TEMPLATE = "add-template";
+
     private static string $TEMPLATE_DIR = __DIR__ . "/../../config/";
 
     /**
@@ -101,6 +103,16 @@ class ExportTemplate
         unlink($templateFile);
     }
 
+    public static function clearTemplates(): int
+    {
+        $deleteNr = 0;
+        foreach (self::loadAllTemplates() as $templateName => $templateContent){
+            $deleteNr++;
+            unlink(self::$TEMPLATE_DIR . $templateName . '.json');
+        }
+        return $deleteNr;
+    }
+
     /**
      * Store Template to JSON-File
      * @param string $templateName
@@ -110,6 +122,11 @@ class ExportTemplate
     public static function storeTemplate(string $templateName, array $arguments, array $options)
     {
         $templateFile = self::createPathForTemplate($templateName);
+
+        if (array_key_exists(self::COMMAND_OPTION_ADD_TEMPLATE, $options)) {
+            unset($options[self::COMMAND_OPTION_ADD_TEMPLATE]);
+        }
+
         $jsonData = json_encode([
             "arguments" => $arguments,
             "options" => $options

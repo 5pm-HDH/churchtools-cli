@@ -13,3 +13,9 @@ composer.phar
 
 # ignore log-files
 *.log
+
+# ignore export files
+*.xlsx
+
+# ignore phar-exports
+ct.phar

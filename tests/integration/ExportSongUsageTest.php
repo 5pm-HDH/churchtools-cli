@@ -1,7 +1,7 @@
 <?php
 
 
-use CTExport\ExportApplication;
+use CTExport\ChurchToolsCliApplication;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -12,7 +12,7 @@ class ExportSongUsageTest extends TestCase
 
     protected function setUp(): void
     {
-        $application = ExportApplication::create();
+        $application = ChurchToolsCliApplication::create();
         $command = $application->find('export:song-usage');
         $this->commandTester = new CommandTester($command);
     }

@@ -5,6 +5,7 @@ namespace CTExport;
 
 
 use CTApi\CTConfig;
+use CTApi\CTLog;
 use InvalidArgumentException;
 
 class ApplicationSettings
@@ -24,7 +25,7 @@ class ApplicationSettings
             self::SETTING_CT_API,
             self::SETTING_CT_EMAIL,
             self::SETTING_CT_PASSWORD,
-            self::SETTING_CT_TOKEN
+            self::SETTING_CT_TOKEN,
         ];
     }
 
@@ -42,6 +43,7 @@ class ApplicationSettings
 
     public static function setupChurchToolsApi()
     {
+        CTLog::enableFileLog(false); // disable file-log because phar can't edit log-file
         $ctApi = self::getSettingForKey(ApplicationSettings::SETTING_CT_API);
         if (is_null($ctApi)) {
             throw new InvalidArgumentException("Please add Url for ChurchTools-Api. Call command settings:setup");

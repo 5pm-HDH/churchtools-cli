@@ -4,8 +4,8 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-use CTExport\ExportApplication;
+use CTExport\ChurchToolsCliApplication;
 use Symfony\Component\Console\Application;
 
-$application = ExportApplication::create();
+$application = ChurchToolsCliApplication::create();
 $application->run();

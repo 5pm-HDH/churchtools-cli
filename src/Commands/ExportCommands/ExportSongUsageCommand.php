@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CTExport\Commands;
+namespace CTExport\Commands\ExportCommands;
 
 
 use CTExport\Commands\Collections\EventCollection;
@@ -26,6 +26,7 @@ class ExportSongUsageCommand extends ExportCommand
 
     protected function configure()
     {
+        parent::configure();
         $this->addArgument("" . self::CALENDAR_IDS . "", InputArgument::REQUIRED, "List of calendars-id separated by comma.");
         $this->addOptionStartDate();
         $this->addOptionEndDate();
@@ -33,8 +34,8 @@ class ExportSongUsageCommand extends ExportCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $startDate = $this->getOptionAsDate($input, "start_date");
-        $endDate = $this->getOptionAsDate($input, "end_date");
+        $startDate = $this->getOptionStartDate($input);
+        $endDate = $this->getOptionEndDate($input);
         $calendarIds = $this->getArgumentAsIntegerList($input, self::CALENDAR_IDS);
 
         $events = $this->loadEventsForCalendar($startDate, $endDate, $calendarIds);
@@ -60,8 +61,6 @@ class ExportSongUsageCommand extends ExportCommand
             ->build($fileName);
         $output->writeln("Stored export to: " . $fileName);
 
-        $this->askStoreExportTemplate($input, $output);
-
-        return Command::SUCCESS;
+        return parent::execute($input, $output);
     }
 }
