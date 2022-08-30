@@ -48,7 +48,8 @@ jobs:
       - name: Commit PHAR-File
         uses: EndBug/add-and-commit@v9
         with:
-          add: 'dist'
+          add: 'dist/ct.phar'
+          commit: --force
           author_name: 'DumbergerL'
           author_email: 'lukas.dumberger@gmail.com'
           message: 'ci(phar): create phar-file'
