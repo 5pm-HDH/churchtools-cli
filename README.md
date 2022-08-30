@@ -2,16 +2,29 @@
 
 ## Usage
 
+**Option 1: Download phar**
+
+Download the packed phar executable: [/dist/ct.phar](https://github.com/5pm-HDH/churchtools-cli/raw/main/dist/ct.phar)
+
+Execute the phar from your bash/cmd and e.q. list all available commands:
+
+```bash
+php ct.phar list
+```
+
+
+**Option 2: Clone this repo**
+
 Clone this repo and execute open the CLI with this command to print all available commands:
 
 ```bash
-php cli list
+php ct list
 ```
 
 Before you can retrieve date from ChurchTools, you must set up the setting. Call this command:
 
 ```bash
-php cli settings:setup
+php ct.phar settings:setup
 ```
 
 ![Setup](./docs/setup.gif)
@@ -20,9 +33,9 @@ php cli settings:setup
 
 Retrieve date from ChurchTools with the `show`-commands:
 
-- `php cli show:api-token` displays the api-token
-- `php cli show:calendars` displays a list of calendars 
-- `php cli show:services` displays all services
+- `php ct.phar show:api-token` displays the api-token
+- `php ct.phar show:calendars` displays a list of calendars 
+- `php ct.phar show:services` displays all services
 
 ![ShowCalendars](./docs/show-calendars.gif)
 
@@ -35,7 +48,7 @@ Export data to excel files with the `export`-commands.
 #### Export Song-Usage
 
 ```bash
-php cli export:song-usage 42 --start_date=2019-02-01 --end_date=2020-04-01
+php ct.phar export:song-usage 42 --start_date=2019-02-01 --end_date=2020-04-01
 ```
 
 Export Usage of songs of all events that are created in the calendar with the id 42. You can optinal add start- / end-date flags.
