@@ -42,6 +42,9 @@ jobs:
       - name: Build PHAR-File
         run: composer run-script bundle-phar
 
+      - name: Show Dist-Content
+        run: ls && cd dist && echo "dist:\n" && ls
+
       - name: Commit PHAR-File
         uses: EndBug/add-and-commit@v9
         with:
