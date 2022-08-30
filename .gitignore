@@ -16,6 +16,3 @@ composer.phar
 
 # ignore export files
 *.xlsx
-
-# ignore phar-exports
-ct.phar
