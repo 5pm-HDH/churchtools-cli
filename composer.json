@@ -19,8 +19,8 @@
     ]
   },
   "scripts": {
-    "bundle-phar": "vendor/bin/phar-composer build ./ ct.phar && php ct.phar settings:clear && php ct.phar template:clear",
-    "bundle-phar-w": "vendor\\bin\\phar-composer.bat build ./ ct.phar  && php ct.phar settings:clear && php ct.phar template:clear"
+    "bundle-phar": "vendor/bin/phar-composer build ./ ./dist/ct.phar && cd dist && php ct.phar settings:clear && php ct.phar template:clear",
+    "bundle-phar-w": "vendor\\bin\\phar-composer.bat build ./ ./dist/ct.phar && cd dist && php ct.phar settings:clear && php ct.phar template:clear"
   },
   "bin": ["ct"],
   "require-dev": {
