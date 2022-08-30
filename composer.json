@@ -4,7 +4,8 @@
   "require": {
     "5pm-hdh/churchtools-api": "dev-master",
     "symfony/console": "^6.0",
-    "phpoffice/phpspreadsheet": "^1.24"
+    "phpoffice/phpspreadsheet": "^1.24",
+    "php": ">=8.0"
   },
   "description": "CLI-Tool for ChurchTools-API",
   "license": "MIT",
@@ -21,13 +22,16 @@
   },
   "scripts": {
     "bundle-phar": "vendor/bin/phar-composer build ./ ./dist/ct.phar",
-    "bundle-phar-w": "vendor\\bin\\phar-composer.bat build ./ ./dist/ct.phar"
+    "bundle-phar-w": "vendor\\bin\\phar-composer.bat build ./ ./dist/ct.phar",
+    "psalm": "./vendor/bin/psalm",
+    "psalm-w": "vendor\\bin\\psalm.bat"
   },
   "bin": [
     "ct"
   ],
   "require-dev": {
     "phpunit/phpunit": "^9.5",
-    "clue/phar-composer": "^1.4"
+    "clue/phar-composer": "^1.4",
+    "vimeo/psalm": "^4.26"
   }
 }
