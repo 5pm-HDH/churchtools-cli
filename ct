@@ -2,10 +2,7 @@
 <?php
 // application.php
 
-require __DIR__.'/vendor/autoload.php';
-
-// PHP-ini options
-ini_set('phar.readonly', 0);
+require __DIR__ . '/vendor/autoload.php';
 
 use CTExport\ChurchToolsCliApplication;
 

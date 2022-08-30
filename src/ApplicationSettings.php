@@ -15,7 +15,8 @@ class ApplicationSettings
     public const SETTING_CT_PASSWORD = "CT_PASSWORD";
     public const SETTING_CT_TOKEN = "CT_TOKEN";
 
-    private static string $SETTINGS_FILE = __DIR__ . "/../config/settings.json";
+    private static string $SETTINGS_FOLDER = "config";
+    private static string $SETTINGS_FILE = "/settings.json";
 
     private static array $settings = [];
 
@@ -67,10 +68,14 @@ class ApplicationSettings
 
     public static function loadSettings(): array
     {
-        if (!file_exists(self::$SETTINGS_FILE)) {
+        if (!file_exists(self::$SETTINGS_FOLDER)) {
+            mkdir(self::$SETTINGS_FOLDER, 0777, true);
+        }
+        if (!file_exists(self::$SETTINGS_FOLDER . self::$SETTINGS_FILE)) {
             self::createEmptySettingsFile();
         }
-        $fileContent = file_get_contents(self::$SETTINGS_FILE);
+
+        $fileContent = file_get_contents(self::$SETTINGS_FOLDER . self::$SETTINGS_FILE);
         $settings = json_decode($fileContent, true);
         foreach (self::getAvailableSettingKeys() as $settingKey) {
             if (!array_key_exists($settingKey, $settings)) {
@@ -83,10 +88,14 @@ class ApplicationSettings
 
     public static function saveSettings(array $settings)
     {
+        if (!file_exists(self::$SETTINGS_FOLDER)) {
+            mkdir(self::$SETTINGS_FOLDER, 0777, true);
+        }
+
         self::validateSettingsInput($settings);
         self::$settings = $settings;
         $jsonString = json_encode($settings);
-        file_put_contents(self::$SETTINGS_FILE, $jsonString);
+        file_put_contents(self::$SETTINGS_FOLDER . self::$SETTINGS_FILE, $jsonString);
     }
 
     private static function createEmptySettingsFile()

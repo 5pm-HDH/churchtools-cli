@@ -8,7 +8,7 @@ class ExportTemplate
 {
     public const COMMAND_OPTION_ADD_TEMPLATE = "add-template";
 
-    private static string $TEMPLATE_DIR = __DIR__ . "/../../config/";
+    private static string $TEMPLATE_DIR = "config/";
 
     /**
      * Load all available Templates as table with columns:
@@ -68,6 +68,10 @@ class ExportTemplate
      */
     private static function loadAllTemplates(): array
     {
+        if (!file_exists(self::$TEMPLATE_DIR)) {
+            mkdir(self::$TEMPLATE_DIR, 0777, true);
+        }
+
         $blackListFiles = [".", "..", ".gitignore", "settings.json"];
 
         $templateFiles = array_filter(scandir(self::$TEMPLATE_DIR), function ($filename) use ($blackListFiles) {
@@ -85,6 +89,10 @@ class ExportTemplate
 
     public static function getTemplateContent(string $templateName): array
     {
+        if (!file_exists(self::$TEMPLATE_DIR)) {
+            mkdir(self::$TEMPLATE_DIR, 0777, true);
+        }
+
         $templateFile = self::$TEMPLATE_DIR . $templateName . ".json";
         if (!file_exists($templateFile)) {
             throw new InvalidArgumentException("Could not load Template " . $templateName . " from disk: " . $templateFile);
@@ -96,6 +104,10 @@ class ExportTemplate
 
     public static function deleteTemplate(string $templateName): void
     {
+        if (!file_exists(self::$TEMPLATE_DIR)) {
+            mkdir(self::$TEMPLATE_DIR, 0777, true);
+        }
+
         $templateFile = self::$TEMPLATE_DIR . $templateName . ".json";
         if (!file_exists($templateFile)) {
             throw new InvalidArgumentException("Could not find Template " . $templateName . " from disk: " . $templateFile);
@@ -106,7 +118,7 @@ class ExportTemplate
     public static function clearTemplates(): int
     {
         $deleteNr = 0;
-        foreach (self::loadAllTemplates() as $templateName => $templateContent){
+        foreach (self::loadAllTemplates() as $templateName => $templateContent) {
             $deleteNr++;
             unlink(self::$TEMPLATE_DIR . $templateName . '.json');
         }
@@ -142,8 +154,10 @@ class ExportTemplate
 
     private static function createPathForTemplate(string $templateName)
     {
+        if (!file_exists(self::$TEMPLATE_DIR)) {
+            mkdir(self::$TEMPLATE_DIR, 0777, true);
+        }
+
         return self::$TEMPLATE_DIR . $templateName . ".json";
     }
-
-
 }
