@@ -21,8 +21,8 @@
     ]
   },
   "scripts": {
-    "bundle-phar": "vendor/bin/phar-composer build ./ ./dist/ct.phar",
-    "bundle-phar-w": "vendor\\bin\\phar-composer.bat build ./ ./dist/ct.phar",
+    "bundle-phar": "rm dist/ct.phar && vendor/bin/phar-composer build ./ ./dist/ct.phar",
+    "bundle-phar-w": "del \"dist\\ct.phar\" && vendor\\bin\\phar-composer.bat build ./ ./dist/ct.phar",
     "psalm": "./vendor/bin/psalm",
     "psalm-w": "vendor\\bin\\psalm.bat"
   },
