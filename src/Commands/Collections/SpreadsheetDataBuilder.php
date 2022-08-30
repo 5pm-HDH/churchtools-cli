@@ -103,7 +103,7 @@ class SpreadsheetDataBuilder extends SpreadsheetBuilder
             $row = 2;
             foreach ($this->data as $dataArray) {
                 foreach ($dataArray as $dataValue) {
-                    $cellIndexColumn = array_search($dataValue, $dataColumnHeadings) + 2;
+                    $cellIndexColumn = ( (int) array_search($dataValue, $dataColumnHeadings)) + 2;
                     $sheet->setCellValueByColumnAndRow($cellIndexColumn, $row, "X");
                     $sheet->getColumnDimensionByColumn($cellIndexColumn)->setWidth(5);
                 }
@@ -127,7 +127,6 @@ class SpreadsheetDataBuilder extends SpreadsheetBuilder
                     $row += 1;
                 }
             } catch (Exception $e) {
-                var_dump($e);
                 // ignore
             }
             $sheet->getStyleByColumnAndRow(2, 2, 2, $row - 1)->applyFromArray(parent::getStyleTable());

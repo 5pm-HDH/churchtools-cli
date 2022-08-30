@@ -16,3 +16,6 @@ composer.phar
 
 # ignore export files
 *.xlsx
+
+# ignore psalm-cache
+/cache/*

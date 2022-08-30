@@ -5,6 +5,7 @@ namespace CTExport\Commands\Collections;
 
 
 use CTApi\Models\Event;
+use CTApi\Models\Service;
 use CTApi\Models\Song;
 use CTApi\Requests\EventRequest;
 use CTApi\Requests\ServiceRequest;
@@ -40,7 +41,7 @@ class EventCollection
             }
             $names = [];
 
-            $event = EventRequest::findOrFail($event->getId()); // reload all events to get Service-Information.
+            $event = EventRequest::findOrFail((int)$event->getId()); // reload all events to get Service-Information.
 
             foreach ($serviceIds as $serviceId) {
                 $eventService = $event->requestEventServiceWithServiceId($serviceId);
@@ -64,7 +65,7 @@ class EventCollection
                 $eventService = $event->requestEventServiceWithServiceId($serviceId);
                 if ($eventService != null && $eventService->getPerson() != null) {
                     $serviceId = $eventService->getServiceId();
-                    $services[] = ServiceRequest::find($serviceId)->getName();
+                    $services[] = ServiceRequest::find((int)$serviceId)?->getName() ?? (new Service());
                 }
             }
             return $services;

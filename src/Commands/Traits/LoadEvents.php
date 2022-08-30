@@ -17,7 +17,7 @@ trait LoadEvents
 
     protected function loadMyEvents(): array
     {
-        return PersonRequest::whoami()?->requestEvents()->get() ?? [];
+        return PersonRequest::whoami()->requestEvents()?->get() ?? [];
     }
 
     protected function loadEventsForCalendar(string $startDate, string $endDate, array $calendarIds): array

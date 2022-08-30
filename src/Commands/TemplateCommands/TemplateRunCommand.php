@@ -68,10 +68,10 @@ class TemplateRunCommand extends AbstractCommand
     private function executeTemplate(array $templateContent, OutputInterface $output): int
     {
         $commandString = $templateContent["arguments"]["command"];
-        $command = $this->getApplication()->find($commandString);
+        $command = $this->getApplication()?->find($commandString);
 
         $input = new ArrayInput($templateContent["arguments"]);
 
-        return $command->run($input, $output);
+        return $command?->run($input, $output) ?? Command::FAILURE;
     }
 }

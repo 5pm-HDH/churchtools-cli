@@ -26,8 +26,8 @@ class TableBuilder
      * @param array $columnNames Array of strings with column-names
      * @param array $tableData Array with models to display in table
      * @param $rowCollector Callback that converts a model from tableData-Array to a array-row ["colVal1", "colVal2", "colVal3"]
-     * @param null $rowFilter Filter-callback that checks if model should be included in the Table.
-     * @param null $rowSorter Sort-callback to table data. Row-Array is given in (not model).
+     * @param ?callable $rowFilter Filter-callback that checks if model should be included in the Table.
+     * @param ?callable $rowSorter Sort-callback to table data. Row-Array is given in (not model).
      */
     private function __construct(
         private array $columnNames,

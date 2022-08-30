@@ -26,14 +26,14 @@ trait LoadGroups
      */
     protected function loadMyGroups(): array
     {
-        $personGroups = PersonRequest::whoami()?->requestGroups()?->get() ?? [];
+        $personGroups = PersonRequest::whoami()->requestGroups()?->get() ?? [];
         return array_map(function (PersonGroup $personGroup) {
             return $personGroup->getGroup();
         }, $personGroups);
     }
 
     /**
-     * @param array $groupId
+     * @param string $groupId
      * @return array Arrag of GroupMember
      */
     protected function loadGroupMember(string $groupId): array

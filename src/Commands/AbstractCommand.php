@@ -8,7 +8,6 @@ use CTExport\ApplicationSettings;
 use Phar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -97,9 +96,9 @@ abstract class AbstractCommand extends Command
                 throw new InvalidArgumentException(sprintf("The list %s contains non-numeric values.", $listAsString));
             }
         }
-        return array_values(array_map(function ($listElement) {
+        return array_map(function ($listElement) {
             return intval($listElement);
-        }, $list));
+        }, $list);
     }
 
     protected function createSpreadsheetPath(?string $note = null): string
@@ -115,7 +114,7 @@ abstract class AbstractCommand extends Command
     private function createExportFilePath(string $fileEnding, ?string $note = null): string
     {
         $name = date("Y-m-d-H-i-s");
-        $name .= "-" . str_replace(":", "-", $this->getName());
+        $name .= "-" . str_replace(":", "-", $this->getName() ?? "export");
         if ($note != null) {
             $name .= '-' . $note;
         }

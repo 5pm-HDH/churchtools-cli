@@ -21,7 +21,7 @@ class ShowApiTokenCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln("API-Token:");
-        $output->writeln(CTConfig::getApiKey());
+        $output->writeln(CTConfig::getApiKey() ?? "<null>");
 
         return Command::SUCCESS;
     }
