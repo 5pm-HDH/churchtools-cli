@@ -4,7 +4,6 @@ namespace CTExport\Commands\ReportCommands;
 
 use CTExport\Commands\AbstractCommand;
 use CTExport\Commands\ReportCommands\ReportBuilders\ReportBuilder;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
