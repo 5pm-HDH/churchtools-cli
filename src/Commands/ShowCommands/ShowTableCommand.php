@@ -17,6 +17,11 @@ abstract class ShowTableCommand extends AbstractCommand
     private const OPTION_EXPORT_JSON = "export-json";
     private const OPTION_EXPORT_JSON_OBJECTS = "export-json-objects";
 
+    public function enableAddTemplate(): bool
+    {
+        return true;
+    }
+
     protected function configure()
     {
         parent::configure();
@@ -48,6 +53,6 @@ abstract class ShowTableCommand extends AbstractCommand
             $output->writeln("Exported table row-objects to JSON successfully.");
         }
 
-        return Command::SUCCESS;
+        return parent::execute($input, $output);
     }
 }

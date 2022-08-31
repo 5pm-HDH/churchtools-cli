@@ -13,27 +13,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class ExportCommand extends AbstractCommand
 {
+    public function enableAddTemplate(): bool
+    {
+        return true;
+    }
+
 
     protected function configure()
     {
         parent::configure();
-        $this->addOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE, null, InputOption::VALUE_REQUIRED, "Create new Template for export.");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!is_null($input->getOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE))) {
-            $templateName = $input->getOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE);
-
-            if (ExportTemplate::checkIfTemplateExists($templateName)) {
-                $output->writeln("Template '" . $templateName . "' already exists. Please use other template-name.");
-                return Command::INVALID;
-            }
-
-            ExportTemplate::storeTemplate($templateName, $input->getArguments(), $input->getOptions());
-            $output->writeln("Template '" . $templateName . "' successfully stored.");
-        }
-
-        return Command::SUCCESS;
+        return parent::execute($input, $output);
     }
 }

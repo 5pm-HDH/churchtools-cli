@@ -10,6 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class ReportCommand extends AbstractCommand
 {
+    public function enableAddTemplate(): bool
+    {
+        return true;
+    }
+
     abstract protected function getReportBuilder(InputInterface $input): ReportBuilder;
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -18,6 +23,6 @@ abstract class ReportCommand extends AbstractCommand
         $reportBuilder->withProgressBar();
         $reportBuilder->build($output, $this->createMarkdownPath());
 
-        return Command::SUCCESS;
+        return parent::execute($input, $output);
     }
 }

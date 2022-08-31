@@ -5,11 +5,13 @@ namespace CTExport\Commands;
 
 
 use CTExport\ApplicationSettings;
+use CTExport\ExportTemplate\ExportTemplate;
 use Phar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractCommand extends Command
@@ -27,6 +29,18 @@ abstract class AbstractCommand extends Command
         return strlen(Phar::running()) > 0 ? true : false;
     }
 
+    function enableAddTemplate(): bool
+    {
+        return false;
+    }
+
+    protected function configure()
+    {
+        if($this->enableAddTemplate()){
+            $this->addOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE, null, InputOption::VALUE_REQUIRED, "Create new Template for export.");
+        }
+    }
+
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
@@ -36,7 +50,7 @@ abstract class AbstractCommand extends Command
     }
 
     /**
-     * Create Input-Parameter <code>start_date</code>
+     * Create Input-Parameter <code>start-date</code>
      */
     protected function addOptionStartDate()
     {
@@ -44,7 +58,7 @@ abstract class AbstractCommand extends Command
     }
 
     /**
-     * Create Input-Parameter <code>end_date</code>
+     * Create Input-Parameter <code>end-date</code>
      */
     protected function addOptionEndDate()
     {
@@ -99,6 +113,23 @@ abstract class AbstractCommand extends Command
         return array_map(function ($listElement) {
             return intval($listElement);
         }, $list);
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        if ($this->enableAddTemplate() && !is_null($input->getOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE))) {
+            $templateName = $input->getOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE);
+
+            if (ExportTemplate::checkIfTemplateExists($templateName)) {
+                $output->writeln("Template '" . $templateName . "' already exists. Please use other template-name.");
+                return Command::INVALID;
+            }
+
+            ExportTemplate::storeTemplate($templateName, $input->getArguments(), $input->getOptions());
+            $output->writeln("Template '" . $templateName . "' successfully stored.");
+        }
+
+        return Command::SUCCESS;
     }
 
     protected function createSpreadsheetPath(?string $note = null): string
