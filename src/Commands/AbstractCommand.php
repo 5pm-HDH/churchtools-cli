@@ -111,6 +111,11 @@ abstract class AbstractCommand extends Command
         return $this->createExportFilePath("json", $note);
     }
 
+    protected function createMarkdownPath(?string $note = null): string
+    {
+        return $this->createExportFilePath("md", $note);
+    }
+
     private function createExportFilePath(string $fileEnding, ?string $note = null): string
     {
         $name = date("Y-m-d-H-i-s");

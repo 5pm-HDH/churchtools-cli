@@ -33,6 +33,35 @@ trait LoadGroups
     }
 
     /**
+     * Load group for given id
+     * @param int $id
+     * @return Group
+     */
+    protected function loadGroupById(int $id): Group
+    {
+        return GroupRequest::findOrFail($id);
+    }
+
+    /**
+     * Load Groups for given id-array
+     * @param array $groupIds
+     * @return array
+     */
+    protected function loadGroupsByIds(array $groupIds): array
+    {
+        $groups = [];
+        foreach ($groupIds as $id) {
+            if ($id != null) {
+                $group = GroupRequest::find((int)$id);
+                if ($group != null) {
+                    $groups[] = $group;
+                }
+            }
+        }
+        return $groups;
+    }
+
+    /**
      * @param string $groupId
      * @return array Arrag of GroupMember
      */
