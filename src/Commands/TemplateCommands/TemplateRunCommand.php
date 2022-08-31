@@ -70,7 +70,11 @@ class TemplateRunCommand extends AbstractCommand
         $commandString = $templateContent["arguments"]["command"];
         $command = $this->getApplication()?->find($commandString);
 
-        $input = new ArrayInput($templateContent["arguments"]);
+        $argumentsForCommand = $templateContent["arguments"];
+        foreach ($templateContent["options"] as $option => $value) {
+            $argumentsForCommand["--" . $option] = $value;
+        }
+        $input = new ArrayInput($argumentsForCommand);
 
         return $command?->run($input, $output) ?? Command::FAILURE;
     }
