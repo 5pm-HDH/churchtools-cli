@@ -22,12 +22,14 @@ class EventCollection
         $this->events = $events;
     }
 
-    public function createSongTable(OutputInterface $output, ?ProgressBar $progressBar = null): SpreadsheetDataBuilder
+    public function createSongTable(OutputInterface $output): SpreadsheetDataBuilder
     {
-        return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($output, $progressBar) {
-            if ($progressBar != null) {
-                $progressBar->advance();
-            }
+        $progressBar = new ProgressBar($output, sizeof($this->events));
+        $progressBar->start();
+
+
+        $tableData = $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($output, $progressBar) {
+            $progressBar->advance();
             try {
                 $songs = $event->requestAgenda()->getSongs();
 
@@ -39,14 +41,19 @@ class EventCollection
                 return null;
             }
         });
+
+        $progressBar->finish();
+        $output->writeln("");
+        return $tableData;
     }
 
-    public function createServicePersonTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetDataBuilder
+    public function createServicePersonTable(array $serviceIds, OutputInterface $output): SpreadsheetDataBuilder
     {
-        return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($serviceIds, $progressBar) {
-            if ($progressBar != null) {
-                $progressBar->advance();
-            }
+        $progressBar = new ProgressBar($output, sizeof($this->events));
+        $progressBar->start();
+
+        $tableData = $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($serviceIds, $progressBar) {
+            $progressBar->advance();
             $names = [];
 
             $event = EventRequest::findOrFail((int)$event->getId()); // reload all events to get Service-Information.
@@ -60,6 +67,10 @@ class EventCollection
             }
             return $names;
         });
+        $progressBar->finish();
+        $output->writeln("");
+
+        return $tableData;
     }
 
     public function createServiceInstrumentTable(array $serviceIds, ?ProgressBar $progressBar = null): SpreadsheetDataBuilder

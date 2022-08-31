@@ -8,7 +8,6 @@ use CTExport\Commands\Collections\EventCollection;
 use CTExport\Commands\Traits\LoadEvents;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,13 +45,8 @@ class ExportSongUsageCommand extends ExportCommand
         }
 
         $output->writeln("Load Event-Data:");
-        $progessBar = new ProgressBar($output, sizeof($events));
-        $progessBar->start();
-
         $eventCollection = new EventCollection($events);
-        $songSpreadsheet = $eventCollection->createSongTable($output, $progessBar);
-        $progessBar->finish();
-        $output->writeln("");
+        $songSpreadsheet = $eventCollection->createSongTable($output);
 
         $fileName = $this->createSpreadsheetPath();
         $songSpreadsheet->withCountColumn()
