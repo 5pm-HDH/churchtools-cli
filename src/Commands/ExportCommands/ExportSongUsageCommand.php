@@ -50,7 +50,7 @@ class ExportSongUsageCommand extends ExportCommand
         $progessBar->start();
 
         $eventCollection = new EventCollection($events);
-        $songSpreadsheet = $eventCollection->createSongTable($progessBar);
+        $songSpreadsheet = $eventCollection->createSongTable($output, $progessBar);
         $progessBar->finish();
         $output->writeln("");
 

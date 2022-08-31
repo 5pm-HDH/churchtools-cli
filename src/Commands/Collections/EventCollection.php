@@ -4,12 +4,14 @@
 namespace CTExport\Commands\Collections;
 
 
+use CTApi\Exceptions\CTRequestException;
 use CTApi\Models\Event;
 use CTApi\Models\Service;
 use CTApi\Models\Song;
 use CTApi\Requests\EventRequest;
 use CTApi\Requests\ServiceRequest;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class EventCollection
 {
@@ -20,16 +22,22 @@ class EventCollection
         $this->events = $events;
     }
 
-    public function createSongTable(?ProgressBar $progressBar = null): SpreadsheetDataBuilder
+    public function createSongTable(OutputInterface $output, ?ProgressBar $progressBar = null): SpreadsheetDataBuilder
     {
-        return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($progressBar) {
+        return $this->collectDataAndCreateSpreadsheetBuilder(function (Event $event) use ($output, $progressBar) {
             if ($progressBar != null) {
                 $progressBar->advance();
             }
-            $songs = $event->requestAgenda()->getSongs();
-            return array_map(function (Song $song) {
-                return $song->getName();
-            }, $songs);
+            try {
+                $songs = $event->requestAgenda()->getSongs();
+
+                return array_map(function (Song $song) {
+                    return $song->getName();
+                }, $songs);
+            } catch (CTRequestException) {
+                $output->writeln(" - Could not load Agenda for Event: " . $event->getName() . " (#" . $event->getId() . ")");
+                return null;
+            }
         });
     }
 
@@ -83,7 +91,10 @@ class EventCollection
         $data = [];
         foreach ($this->events as $event) {
             $eventKey = $this->createKeyForEvent($event);
-            $data[$eventKey] = $dataCollector($event);
+            $collectedData = $dataCollector($event);
+            if ($collectedData != null) {
+                $data[$eventKey] = $collectedData;
+            }
         }
         return $this->createSpreadsheetBuilderFromData($data);
     }
