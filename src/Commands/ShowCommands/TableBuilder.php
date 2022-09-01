@@ -20,6 +20,7 @@ class TableBuilder
     private ?ProgressBar $progressBar;
     private bool $showProgressBar = false;
     private array $tableRowBuffer = [];
+    private ?int $distinctByColumn = null;
 
     /**
      * TableBuilder constructor.
@@ -43,12 +44,26 @@ class TableBuilder
         }
     }
 
+    /**
+     * Show Progressbar when build table.
+     * @return $this fluent-api
+     */
     public function withProgressBar(): TableBuilder
     {
         $this->showProgressBar = true;
         return $this;
     }
 
+    /**
+     * Filter rows with duplicated values.
+     * @param int $columnId Column to check for duplicated values.
+     * @return $this fluent-api
+     */
+    public function distinctByColumn(int $columnId): TableBuilder
+    {
+        $this->distinctByColumn = $columnId;
+        return $this;
+    }
 
     public function exportToSpreadsheet(string $spreadsheetPath)
     {
@@ -103,6 +118,23 @@ class TableBuilder
                 $progressBar->finish();
             }
 
+            // Distinct Rows if column is specified
+            if (isset($this->distinctByColumn)) {
+                $addedValues = [];
+                $newRows = [];
+                foreach ($rows as $row) {
+                    if (array_key_exists($this->distinctByColumn, $row)) {
+                        $value = $row[$this->distinctByColumn];
+                        if (in_array($value, $addedValues)) {
+                            continue;
+                        }
+                        $addedValues[] = $value;
+                    }
+                    $newRows[] = $row;
+                }
+                $rows = $newRows;
+            }
+
             // Sort-Table if TableSorter is present
             if (isset($this->rowSorter)) {
                 usort($rows, $this->rowSorter);
@@ -113,6 +145,55 @@ class TableBuilder
 
         return $this->tableRowBuffer;
     }
+
+    public function exportTableRowsToJson(string $jsonPath)
+    {
+        $rows = $this->createTableRowsLazy();
+        $columnNames = $this->columnNames;
+        $tableWithKeys = array_map(function ($row) use ($columnNames) {
+            $index = 0;
+            $rowWithKeys = [];
+            foreach ($columnNames as $columnName) {
+                $jsonKey = $this->createJsonKey($columnName);
+
+                $rowWithKeys[$jsonKey] = $row[$index];
+                $index++;
+            }
+            return $rowWithKeys;
+        }, $rows);
+
+        $jsonContent = json_encode($tableWithKeys);
+        file_put_contents($jsonPath, $jsonContent);
+    }
+
+    /**
+     * Convert Key-String to Json-Key with kebab-case.
+     * @param string $key
+     * @return string
+     */
+    private function createJsonKey(string $key): string
+    {
+        $key = str_replace(" ", "-", $key);
+        $key = str_replace(" ", "*", $key);
+        $key = strtolower($key);
+        return $key;
+    }
+
+    public function exportTableObjectsToJson(string $jsonPath)
+    {
+        $jsonData = array_map(function ($modelData) {
+            if (is_object($modelData)) {
+                return (array)$modelData;
+            }
+            return $modelData;
+        }, $this->tableData);
+        $jsonContent = json_encode($jsonData);
+        file_put_contents($jsonPath, $jsonContent);
+    }
+
+    /**
+     * STATIC METHODS TO INITIALIZE TABLE BUILDER
+     */
 
     /**
      * Create TableBuilder for Calendars
@@ -164,7 +245,6 @@ class TableBuilder
             }
         );
     }
-
 
     public static function forGroupMembers(array $groupMemberModels)
     {
@@ -228,6 +308,24 @@ class TableBuilder
                 return strcmp($rowA[1], $rowB[1]); // sort by title
             }
         );
+    }
+
+    public static function forSongCategories(array $songModels): TableBuilder
+    {
+        return (new TableBuilder(
+            ["Id", "Name"],
+            $songModels,
+            function (Song $song) {
+                return [
+                    $song->getCategory()?->getId(),
+                    $song->getCategory()?->getName()
+                ];
+            },
+            null,
+            function ($rowA, $rowB) {
+                return (int)$rowA[0] - (int)$rowB[0];
+            }
+        ))->distinctByColumn(0);
     }
 
     public static function forBookings(array $bookingResources): TableBuilder
@@ -298,50 +396,5 @@ class TableBuilder
                 ];
             }
         );
-    }
-
-    public function exportTableRowsToJson(string $jsonPath)
-    {
-        $rows = $this->createTableRowsLazy();
-        $columnNames = $this->columnNames;
-        $tableWithKeys = array_map(function ($row) use ($columnNames) {
-            $index = 0;
-            $rowWithKeys = [];
-            foreach ($columnNames as $columnName) {
-                $jsonKey = $this->createJsonKey($columnName);
-
-                $rowWithKeys[$jsonKey] = $row[$index];
-                $index++;
-            }
-            return $rowWithKeys;
-        }, $rows);
-
-        $jsonContent = json_encode($tableWithKeys);
-        file_put_contents($jsonPath, $jsonContent);
-    }
-
-    /**
-     * Convert Key-String to Json-Key with kebab-case.
-     * @param string $key
-     * @return string
-     */
-    private function createJsonKey(string $key): string
-    {
-        $key = str_replace(" ", "-", $key);
-        $key = str_replace(" ", "*", $key);
-        $key = strtolower($key);
-        return $key;
-    }
-
-    public function exportTableObjectsToJson(string $jsonPath)
-    {
-        $jsonData = array_map(function ($modelData) {
-            if (is_object($modelData)) {
-                return (array)$modelData;
-            }
-            return $modelData;
-        }, $this->tableData);
-        $jsonContent = json_encode($jsonData);
-        file_put_contents($jsonPath, $jsonContent);
     }
 }
