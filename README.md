@@ -1,5 +1,10 @@
 # ChurchTools CLI-Tool
 
+## Demo - Export Songs to Excel
+
+This Demo shows how to export all songs from ChurchTools with the CLI-Tool:
+![DemoApplication](./docs/cli-demo.gif)
+
 ## Prerequisites
 
 To use this CLI-Tool you need to install PHP 8.0 on your System.
