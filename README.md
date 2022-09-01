@@ -1,9 +1,9 @@
 # ChurchTools CLI-Tool
 
-## Demo (Export Songs to Excel)
+## Demo - Export Songs to Excel
 
 This Demo shows how to export all songs from ChurchTools with the CLI-Tool:
-![song-export-demo](./docs/cli-demo.mp4)
+![DemoApplication](./docs/cli-demo.gif)
 
 ## Prerequisites
 
