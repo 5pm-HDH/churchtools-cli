@@ -17,6 +17,7 @@ composer.phar
 # ignore export files
 *.xlsx
 *report*.md
+*show*.json
 
 # ignore psalm-cache
 /cache/*
