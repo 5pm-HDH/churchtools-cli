@@ -97,6 +97,14 @@ php ct.phar export:service-person 42 12,13,14 --start_date=2019-02-01 --end_date
 Export the services of all events that are created in the calendar with the id 42. You can optional add start- /
 end-date flags.
 
+#### Export Permissions
+
+```bash
+php ct.phar export:permissions
+```
+
+Detailed information: [Export-Permission](./docs/examples/permissions.md)
+
 ### Templates
 
 Templates are useful to store frequently executed commands. With the option `--add-template=[TEMPLATE-NAME]` you can
