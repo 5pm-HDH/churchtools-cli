@@ -36,7 +36,7 @@ abstract class AbstractCommand extends Command
 
     protected function configure()
     {
-        if($this->enableAddTemplate()){
+        if ($this->enableAddTemplate()) {
             $this->addOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE, null, InputOption::VALUE_REQUIRED, "Create new Template for export.");
         }
     }
@@ -51,18 +51,20 @@ abstract class AbstractCommand extends Command
 
     /**
      * Create Input-Parameter <code>start-date</code>
+     * @param string $dateString date string
      */
-    protected function addOptionStartDate()
+    protected function addOptionStartDate(string $dateString = "-2 years")
     {
-        $this->addOption(self::START_DATE, null, InputArgument::OPTIONAL, "Start Date", date("Y-m-d", strtotime("-2 years")));
+        $this->addOption(self::START_DATE, null, InputArgument::OPTIONAL, "Start Date", date("Y-m-d", strtotime($dateString)));
     }
 
     /**
      * Create Input-Parameter <code>end-date</code>
+     * @param string $dateString
      */
-    protected function addOptionEndDate()
+    protected function addOptionEndDate(string $dateString = "today")
     {
-        $this->addOption(self::END_DATE, null, InputArgument::OPTIONAL, "Start Date", date("Y-m-d"));
+        $this->addOption(self::END_DATE, null, InputArgument::OPTIONAL, "Start Date", date("Y-m-d", strtotime($dateString)));
     }
 
     protected function getOptionStartDate(InputInterface $input)

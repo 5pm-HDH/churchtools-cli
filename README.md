@@ -51,14 +51,16 @@ Retrieve date from ChurchTools with the `show`-commands. For example show all av
 Other available commands:
 
 - `show:api-token`
-- `show:calendars`
-- `show:services`
+- `show:birthdays`
 - `show:groups`
+- `show:group-members`
+- `show:calendars`
+- `show:events`
+- `show:services`
+- `show:songs`
+- `show:song-categories`
 - `show:resources`
 - `show:bookings`
-- `show:events`
-- `show:songs`
-- `show:group-members`
 
 **Options:**
 

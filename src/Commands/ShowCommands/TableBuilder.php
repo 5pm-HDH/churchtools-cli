@@ -4,6 +4,7 @@
 namespace CTExport\Commands\ShowCommands;
 
 
+use CTApi\Models\BirthdayPerson;
 use CTApi\Models\Event;
 use CTApi\Models\GroupMember;
 use CTApi\Models\Person;
@@ -397,6 +398,24 @@ class TableBuilder
                 return [
                     $groupModel->getId(),
                     $groupModel->getName()
+                ];
+            }
+        );
+    }
+
+    public static function forBirthdays(array $birthdayChildren)
+    {
+        return new TableBuilder(
+            ["Birthday", "Anniversary", "Age", "Person Id", "First name", "Last name"],
+            $birthdayChildren,
+            function(BirthdayPerson $birthdayPerson){
+                return [
+                    $birthdayPerson->getAnniversaryInitialDate(),
+                    $birthdayPerson->getAnniversary(),
+                    $birthdayPerson->getAge(),
+                    $birthdayPerson->getPerson()?->getId(),
+                    $birthdayPerson->getPerson()?->getFirstName(),
+                    $birthdayPerson->getPerson()?->getLastName(),
                 ];
             }
         );
