@@ -47,4 +47,15 @@ class SpreadsheetTableBuilder extends SpreadsheetBuilder
         $writer = new Xlsx($spreadsheet);
         $writer->save($filePathWithName);
     }
+
+    public static function fromJsonArray(array $objectArray): SpreadsheetTableBuilder
+    {
+        $lastObject = end($objectArray);
+        $heading = array_keys($lastObject);
+        $rows = array_map(function($object){
+            return array_values($object);
+        }, $objectArray);
+
+        return new SpreadsheetTableBuilder($heading, $rows);
+    }
 }
