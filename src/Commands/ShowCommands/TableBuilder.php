@@ -183,7 +183,11 @@ class TableBuilder
     {
         $jsonData = array_map(function ($modelData) {
             if (is_object($modelData)) {
-                return (array)$modelData;
+                if (method_exists($modelData, "toData")) { // use churchtools-api serializer "toData" if exists
+                    return $modelData->toData();
+                } else {
+                    return (array)$modelData;
+                }
             }
             return $modelData;
         }, $this->tableData);
