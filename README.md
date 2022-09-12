@@ -105,6 +105,14 @@ php ct.phar export:permissions
 
 Detailed information: [Export-Permission](./docs/examples/permissions.md)
 
+#### Export Person Tags
+
+```bash
+php ct.phar export:person-tags 11,18,16
+```
+
+Export the Tags of all Group-Members in the given groups. In the example above the export will retrieve all members from group 11, 18 and 16.
+
 ### Templates
 
 Templates are useful to store frequently executed commands. With the option `--add-template=[TEMPLATE-NAME]` you can
