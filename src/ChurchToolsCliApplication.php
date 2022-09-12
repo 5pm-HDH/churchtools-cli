@@ -5,6 +5,7 @@ namespace CTExport;
 
 
 use CTExport\Commands\ExportCommands\ExportPermissionsCommand;
+use CTExport\Commands\ExportCommands\ExportPersonTagsCommand;
 use CTExport\Commands\ExportCommands\ExportServicePersonCommand;
 use CTExport\Commands\ExportCommands\ExportSongUsageCommand;
 use CTExport\Commands\ReportCommands\ReportGroupIntersectionCommand;
@@ -49,6 +50,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new ExportSongUsageCommand());
         $this->add(new ExportServicePersonCommand());
         $this->add(new ExportPermissionsCommand());
+        $this->add(new ExportPersonTagsCommand());
 
         // Report Commands
         $this->add(new ReportGroupIntersectionCommand());
