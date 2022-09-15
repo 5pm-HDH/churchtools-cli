@@ -59,6 +59,7 @@ Other available commands:
 - `show:events`
 - `show:songs`
 - `show:group-members`
+- `show:absence`
 
 **Options:**
 

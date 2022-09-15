@@ -4,6 +4,7 @@
 namespace CTExport\Commands\ShowCommands;
 
 
+use CTApi\Models\Absence;
 use CTApi\Models\Event;
 use CTApi\Models\GroupMember;
 use CTApi\Models\Person;
@@ -397,6 +398,26 @@ class TableBuilder
                 return [
                     $groupModel->getId(),
                     $groupModel->getName()
+                ];
+            }
+        );
+    }
+
+    public static function forAbsences(array $absenceModels)
+    {
+        return new TableBuilder(
+            ["Id", "Comment", "Reason-Id", "Reason", "Start-Date", "End-Date", "Person-Id", "Name"],
+            $absenceModels,
+            function (Absence $absence) {
+                return [
+                    $absence->getId(),
+                    $absence->getComment(),
+                    $absence->getAbsenceReason()?->getId(),
+                    $absence->getAbsenceReason()?->getName(),
+                    $absence->getStartDate() . (!is_null($absence->getStartTime()) ? ' ' . $absence->getStartTime() : ''),
+                    $absence->getEndDate() . (!is_null($absence->getEndTime()) ? ' ' . $absence->getEndTime() : ''),
+                    $absence->getPerson()?->getId(),
+                    $absence->getPerson()?->getFirstName() . ' ' . $absence->getPerson()?->getLastName()
                 ];
             }
         );

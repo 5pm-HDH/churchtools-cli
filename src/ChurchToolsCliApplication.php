@@ -12,6 +12,7 @@ use CTExport\Commands\ReportCommands\ReportGroupIntersectionCommand;
 use CTExport\Commands\SettingCommands\SettingsClearCommand;
 use CTExport\Commands\SettingCommands\SettingsSetupCommand;
 use CTExport\Commands\SettingCommands\SettingsShowCommand;
+use CTExport\Commands\ShowCommands\ShowAbsencesCommand;
 use CTExport\Commands\ShowCommands\ShowApiTokenCommand;
 use CTExport\Commands\ShowCommands\ShowBookingsCommand;
 use CTExport\Commands\ShowCommands\ShowCalendarsCommand;
@@ -45,6 +46,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new ShowSongsCommand());
         $this->add(new ShowSongCategoriesCommand());
         $this->add(new ShowGroupMembersCommand());
+        $this->add(new ShowAbsencesCommand());
 
         // Export Commands
         $this->add(new ExportSongUsageCommand());
