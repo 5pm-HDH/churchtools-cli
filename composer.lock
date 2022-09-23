@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/5pm-HDH/churchtools-api.git",
-                "reference": "e144fbd37b2a0798ac4fd51a9f519474ccd39058"
+                "reference": "66095ece771d11a6512486dc0f46fc991e1c4262"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/5pm-HDH/churchtools-api/zipball/e144fbd37b2a0798ac4fd51a9f519474ccd39058",
-                "reference": "e144fbd37b2a0798ac4fd51a9f519474ccd39058",
+                "url": "https://api.github.com/repos/5pm-HDH/churchtools-api/zipball/66095ece771d11a6512486dc0f46fc991e1c4262",
+                "reference": "66095ece771d11a6512486dc0f46fc991e1c4262",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
                 "issues": "https://github.com/5pm-HDH/churchtools-api/issues",
                 "source": "https://github.com/5pm-HDH/churchtools-api/tree/master"
             },
-            "time": "2022-09-15T09:51:53+00:00"
+            "time": "2022-09-22T11:52:23+00:00"
         },
         {
             "name": "doctrine/cache",
