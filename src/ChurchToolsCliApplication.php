@@ -9,6 +9,7 @@ use CTExport\Commands\ExportCommands\ExportPersonTagsCommand;
 use CTExport\Commands\ExportCommands\ExportServicePersonCommand;
 use CTExport\Commands\ExportCommands\ExportSongUsageCommand;
 use CTExport\Commands\MigrateCommands\MigrateSongArrangementNameCommand;
+use CTExport\Commands\MigrateCommands\MigrateSongShouldPracticeClearCommand;
 use CTExport\Commands\ReportCommands\ReportGroupIntersectionCommand;
 use CTExport\Commands\SettingCommands\SettingsClearCommand;
 use CTExport\Commands\SettingCommands\SettingsSetupCommand;
@@ -71,6 +72,7 @@ class ChurchToolsCliApplication extends Application
 
         // Migrate Commands
         $this->add(new MigrateSongArrangementNameCommand());
+        $this->add(new MigrateSongShouldPracticeClearCommand());
     }
 
     public static function create(): ChurchToolsCliApplication

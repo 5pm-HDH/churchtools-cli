@@ -62,9 +62,12 @@ abstract class MigrateCommand extends AbstractCommand
         $migration->setTestRun($isTestrun);
 
         foreach ($models as $model) {
-            $resultArray = $migration->migrateModel($model);
-            foreach ($resultArray as $result) {
-                $this->migrationResultCount[$result]++;
+            $result = $migration->migrateModel($model);
+            if (!is_array($result)) { // capsule result to array if it is no array
+                $result = [$result];
+            }
+            foreach ($result as $resultCode) {
+                $this->migrationResultCount[$resultCode]++;
             }
         }
 

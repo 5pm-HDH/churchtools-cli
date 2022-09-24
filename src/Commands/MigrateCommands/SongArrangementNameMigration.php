@@ -29,18 +29,18 @@ class SongArrangementNameMigration extends Migration
     private static string $replaceWith = "In [KEY]";
 
 
-    public function migrateModel($model): array
+    public function migrateModel($model): int|array
     {
-        $statusArrays = [];
         if (is_a($model, Song::class)) {
+            $statusArrays = [];
             $arrangements = $model->getArrangements();
             foreach ($arrangements as $arrangement) {
                 $statusArrays[] = $this->migrateArrangement($arrangement);
             }
+            return $statusArrays;
         } else {
-            $statusArrays[] = $this->logModel("Model is not subclass of Song", $model, Migration::RESULT_FAILED);
+            return $this->logModel("Model is not subclass of Song", $model, Migration::RESULT_FAILED);
         }
-        return $statusArrays;
     }
 
     private function migrateArrangement(SongArrangement $songArrangement): int

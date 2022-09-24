@@ -20,9 +20,9 @@ abstract class Migration
 
     /**
      * @param $model
-     * @return array Contains Status Ids
+     * @return int|array Status Ids
      */
-    abstract public function migrateModel($model): array;
+    abstract public function migrateModel($model): int|array;
 
     public function setTestRun(bool $isTestRun)
     {
