@@ -29,31 +29,31 @@ class SongArrangementNameMigration extends Migration
     private static string $replaceWith = "In [KEY]";
 
 
-    public function migrateModel($model): void
+    public function migrateModel($model): array
     {
+        $statusArrays = [];
         if (is_a($model, Song::class)) {
             $arrangements = $model->getArrangements();
             foreach ($arrangements as $arrangement) {
-                $this->migrateArrangement($arrangement);
+                $statusArrays[] = $this->migrateArrangement($arrangement);
             }
         } else {
-            $this->logModel("Model is not subclass of Song", $model);
+            $statusArrays[] = $this->logModel("Model is not subclass of Song", $model, Migration::RESULT_FAILED);
         }
+        return $statusArrays;
     }
 
-    private function migrateArrangement(SongArrangement $songArrangement)
+    private function migrateArrangement(SongArrangement $songArrangement): int
     {
-        $name = $songArrangement->getName();
+        $name = $songArrangement->getName() ?? "";
         $key = $songArrangement->getKeyOfArrangement();
         if (is_null($key) || $key == "") {
-            $this->logModel("Key of model is null. Migration of Arrangement-Name is impossible.", $songArrangement);
-            return;
+            return $this->logModel("Key of model is null. Migration of Arrangement-Name is impossible.", $songArrangement, Migration::RESULT_SKIPPED);
         }
         $newName = $this->migrateArrangementName($name, $key);
 
         if ($newName == $name) {
-            $this->logModel("No update required for arrangement with key: " . $key . " and name: '" . $name . "'", $songArrangement);
-            return;
+            return $this->logModel("No update required for arrangement with key: " . $key . " and name: '" . $name . "'", $songArrangement, Migration::RESULT_SKIPPED);
         }
 
 
@@ -62,9 +62,9 @@ class SongArrangementNameMigration extends Migration
             if (!$this->isTestRun()) {
                 SongArrangementRequest::update($songArrangement);
             }
-            $this->logModel("Successfully updated arrangement-name (key: " . $key . ") from '" . $name . "' to new name '" . $newName . "'", $songArrangement);
+            return $this->logModel("Successfully updated arrangement-name (key: " . $key . ") from '" . $name . "' to new name '" . $newName . "'", $songArrangement, Migration::RESULT_SUCCESS);
         } catch (CTRequestException $exception) {
-            $this->logModel("Error on updating arrangement-name: " . $exception->getMessage(), $songArrangement);
+            return $this->logModel("Error on updating arrangement-name: " . $exception->getMessage(), $songArrangement, Migration::RESULT_FAILED);
         }
     }
 

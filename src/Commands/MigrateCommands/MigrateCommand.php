@@ -13,7 +13,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class MigrateCommand extends AbstractCommand
 {
-    const INPUT_OPTION_TESTRUN = "testrun";
+    const INPUT_OPTION_TESTMODE = "testmode";
+
+    private array $migrationResultCount = [
+        Migration::RESULT_SUCCESS => 0,
+        Migration::RESULT_SKIPPED => 0,
+        Migration::RESULT_FAILED => 0,
+        Migration::RESULT_UNDEFINED => 0
+    ];
 
     public function enableAddTemplate(): bool
     {
@@ -27,12 +34,12 @@ abstract class MigrateCommand extends AbstractCommand
     protected function configure()
     {
         parent::configure();
-        $this->addOption(self::INPUT_OPTION_TESTRUN, null, InputOption::VALUE_NEGATABLE, "Execute migration without editing data in production.", true);
+        $this->addOption(self::INPUT_OPTION_TESTMODE, null, InputOption::VALUE_NEGATABLE, "Execute migration without editing data in production.", true);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $isTestrun = $input->getOption(self::INPUT_OPTION_TESTRUN);
+        $isTestrun = $input->getOption(self::INPUT_OPTION_TESTMODE);
         $output->writeln("Execute Migration " . ($isTestrun ? "as test-run." : "on production data."));
 
         $models = $this->collectModels();
@@ -50,20 +57,49 @@ abstract class MigrateCommand extends AbstractCommand
         $migration->setTestRun($isTestrun);
 
         foreach ($models as $model) {
-            $migration->migrateModel($model);
+            $resultArray = $migration->migrateModel($model);
+            foreach ($resultArray as $result) {
+                $this->migrationResultCount[$result]++;
+            }
         }
 
+
+        // Migration Results
+        $output->writeln("Migration result:");
+        $output->writeln("\t- Success: " . $this->migrationResultCount[Migration::RESULT_SUCCESS]);
+        $output->writeln("\t- Skipped: " . $this->migrationResultCount[Migration::RESULT_SKIPPED]);
+        $output->writeln("\t- Failed: " . $this->migrationResultCount[Migration::RESULT_FAILED]);
+        $output->writeln("\t- Undefined: " . $this->migrationResultCount[Migration::RESULT_UNDEFINED]);
+
+        $sortedMarkdownFile = MarkdownBuilder::clone($markdownFile);
+        $sortedMarkdownFile->sortMarkdown();
+
+        $this->writeResultToMarkdown($sortedMarkdownFile, $isTestrun);
+        $this->writeResultToMarkdown($markdownFile, $isTestrun);
+
+        // Build Markdown Logs
         $logFilePath = $this->createMarkdownPath();
         $logFileSortedPath = $this->createMarkdownPath("sorted");
-        $output->writeln("Finished " . ($isTestrun ? "test-" : "production-") . "migration:");
         $markdownFile->build($logFilePath);
-        $markdownFile->sortMarkdown()->build($logFileSortedPath);
+        $sortedMarkdownFile->build($logFileSortedPath);
+        $output->writeln("Finished migration in " . ($isTestrun ? "test-mode:" : "production-mode:"));
         $output->writeln("\t- Stored Log to " . $logFilePath);
         $output->writeln("\t- Stored Log to " . $logFileSortedPath);
         if ($isTestrun) {
-            $output->writeln("\t- Execute migration again with '--no-testrun' to run migration on production data");
+            $output->writeln("\t- Execute migration again with '--no-" . self::INPUT_OPTION_TESTMODE . "' to run migration on production data");
         }
 
         return parent::execute($input, $output);
+    }
+
+    private function writeResultToMarkdown(MarkdownBuilder $markdownFile, bool $isTestMode)
+    {
+        $markdownFile->prependHeading("Log:");
+        $markdownFile->prependText("");
+        $markdownFile->prependListItem("Failed: " . $this->migrationResultCount[Migration::RESULT_FAILED]);
+        $markdownFile->prependListItem("Skipped: " . $this->migrationResultCount[Migration::RESULT_SKIPPED]);
+        $markdownFile->prependListItem("Success: " . $this->migrationResultCount[Migration::RESULT_SUCCESS]);
+        $markdownFile->prependListItem("Undefined: " . $this->migrationResultCount[Migration::RESULT_UNDEFINED]);
+        $markdownFile->prependHeading("Migration result in " . ($isTestMode ? "test-mode" : "production-mode") . ":");
     }
 }
