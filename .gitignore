@@ -17,6 +17,7 @@ composer.phar
 # ignore export files
 *.xlsx
 *report*.md
+*migrate*.md
 *show*.json
 *export*.json
 

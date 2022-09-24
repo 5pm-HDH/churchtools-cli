@@ -34,6 +34,16 @@ trait LoadEvents
         return SongRequest::all();
     }
 
+    protected function loadSongsOfCategories(array $songCategoryIds): array
+    {
+        return SongRequest::where("song_category_ids", $songCategoryIds)->get();
+    }
+
+    protected function loadSongsShouldPractice(bool $shouldPractice): array
+    {
+        return SongRequest::where("practice", $shouldPractice)->get();
+    }
+
     protected function loadSongsWithTitle(string $title): array
     {
         return SongRequest::where("name", $title)->get();

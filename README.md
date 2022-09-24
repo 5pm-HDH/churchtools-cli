@@ -129,6 +129,25 @@ with the template-name as argument.
 - `template:delete` delete a stored export-template
 - `template:clear` deletes all templates
 
+### Migrations
+
+With the CLI tool you can also update (or migrate) data. The migrate-commands are available for this purpose:
+
+- `php ct.phar migrate:song-arrangement-bpm`
+- `php ct.phar migrate:song-arrangement-names`
+- `php ct.phar migrate:song-should-practice-clear`
+
+**IMPORTANT:** By default all migrate commands run in "Test-Mode". This means the data is not really changed. It only simulates the commands to give you the opportunity to check if the migration updates the data correctly. To run the migration on production-data please add the option `--no-testmode`.
+
+**Options:**
+- `--add-template=TemplateName` create Template for Migration
+- `--testmode` run migration in testmode (this is default case)
+- `--no-testmode` run migration on production data
+- `--silence` dont print migration results to cli-console
+- `--song-categories` (only for song-migrations) filter by song-categories as id-list
+
+Example on how to use migrations: [Example how to use migrations](/docs/examples/migrate-songs.md)
+
 ### Report
 
 Reports generate Markdown files as output. There is currently one report available:
