@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class MigrateCommand extends AbstractCommand
 {
     const INPUT_OPTION_TESTMODE = "testmode";
+    const INPUT_OPTION_SILENCE = "silence";
 
     private array $migrationResultCount = [
         Migration::RESULT_SUCCESS => 0,
@@ -35,11 +36,13 @@ abstract class MigrateCommand extends AbstractCommand
     {
         parent::configure();
         $this->addOption(self::INPUT_OPTION_TESTMODE, null, InputOption::VALUE_NEGATABLE, "Execute migration without editing data in production.", true);
+        $this->addOption(self::INPUT_OPTION_SILENCE, null, InputOption::VALUE_NEGATABLE, "Prevent display migration log to console.", false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $isTestrun = $input->getOption(self::INPUT_OPTION_TESTMODE);
+        $isSilence = $input->getOption(self::INPUT_OPTION_SILENCE);
         $output->writeln("Execute Migration " . ($isTestrun ? "as test-run." : "on production data."));
 
         $models = $this->collectModels();
@@ -51,7 +54,9 @@ abstract class MigrateCommand extends AbstractCommand
         $output->writeln("Found " . sizeof($models) . " data entries from type " . get_class($lastModel) . " to migrate.");
 
         $migration = $this->getMigration();
-        $migration->setOutput($output);
+        if(!$isSilence){
+            $migration->setOutput($output);
+        }
         $markdownFile = new MarkdownBuilder();
         $migration->setLog($markdownFile);
         $migration->setTestRun($isTestrun);
