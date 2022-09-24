@@ -5,20 +5,28 @@ namespace CTExport\Commands\MigrateCommands;
 
 
 use CTExport\Commands\Traits\LoadEvents;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 abstract class MigrateSongCommand extends MigrateCommand
 {
     use LoadEvents;
 
+    const OPTION_SONG_CATEGORIES = "song-categories";
+
     protected function configure()
     {
         parent::configure();
-        // option for song-category
-        //$this->addOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE, null, InputOption::VALUE_REQUIRED, "Create new Template for export.");
+        $this->addOption(self::OPTION_SONG_CATEGORIES, null, InputOption::VALUE_REQUIRED, "Filter for song-categories as id-list.");
     }
 
-    protected function collectModels(): array
+    protected function collectModels(InputInterface $input): array
     {
-        return $this->loadSongs();
+        $songCategoryIds = $this->getOptionAsIntegerList($input, self::OPTION_SONG_CATEGORIES);
+        if (empty($songCategoryIds)) {
+            return $this->loadSongs();
+        } else {
+            return $this->loadSongsOfCategories($songCategoryIds);
+        }
     }
 }

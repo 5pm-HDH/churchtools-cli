@@ -28,7 +28,7 @@ abstract class MigrateCommand extends AbstractCommand
         return true;
     }
 
-    abstract protected function collectModels(): array;
+    abstract protected function collectModels(InputInterface $input): array;
 
     abstract protected function getMigration(): Migration;
 
@@ -45,7 +45,7 @@ abstract class MigrateCommand extends AbstractCommand
         $isSilence = $input->getOption(self::INPUT_OPTION_SILENCE);
         $output->writeln("Execute Migration " . ($isTestrun ? "as test-run." : "on production data."));
 
-        $models = $this->collectModels();
+        $models = $this->collectModels($input);
         if (empty($models)) {
             $output->writeln("Found 0 data entries to migrate.");
             return Command::INVALID;
@@ -54,7 +54,7 @@ abstract class MigrateCommand extends AbstractCommand
         $output->writeln("Found " . sizeof($models) . " data entries from type " . get_class($lastModel) . " to migrate.");
 
         $migration = $this->getMigration();
-        if(!$isSilence){
+        if (!$isSilence) {
             $migration->setOutput($output);
         }
         $markdownFile = new MarkdownBuilder();
