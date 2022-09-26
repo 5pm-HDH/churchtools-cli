@@ -4,6 +4,7 @@
 namespace CTExport;
 
 
+use CTExport\Commands\ExportCommands\ExportGroupMemberAvatars;
 use CTExport\Commands\ExportCommands\ExportPermissionsCommand;
 use CTExport\Commands\ExportCommands\ExportPersonTagsCommand;
 use CTExport\Commands\ExportCommands\ExportServicePersonCommand;
@@ -56,6 +57,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new ExportServicePersonCommand());
         $this->add(new ExportPermissionsCommand());
         $this->add(new ExportPersonTagsCommand());
+        $this->add(new ExportGroupMemberAvatars());
 
         // Report Commands
         $this->add(new ReportGroupIntersectionCommand());

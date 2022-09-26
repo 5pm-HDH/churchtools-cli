@@ -156,4 +156,18 @@ abstract class AbstractCommand extends Command
         }
         return $name . '.' . $fileEnding;
     }
+
+    public function createFolderPath(?string $note = null): string
+    {
+        $folderName = date("Y-m-d-H-i-s");
+        $folderName .= "-" . str_replace(":", "-", $this->getName() ?? "export");
+        if ($note != null) {
+            $folderName .= '-' . $note;
+        }
+        if(!file_exists($folderName)){
+            mkdir($folderName);
+        }
+
+        return $folderName;
+    }
 }
