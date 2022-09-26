@@ -4,6 +4,7 @@
 namespace CTExport\Commands\Traits;
 
 
+use CTApi\Requests\EventAgendaRequest;
 use CTApi\Requests\EventRequest;
 use CTApi\Requests\PersonRequest;
 use CTApi\Requests\SongRequest;
@@ -27,6 +28,12 @@ trait LoadEvents
             $calId = $event?->getCalendar()?->getDomainIdentifier();
             return is_null($calId) ? false : in_array($calId, $calendarIds);
         }));
+    }
+
+    protected function loadSetlistForEvent(int $eventId)
+    {
+        $agenda = EventAgendaRequest::fromEvent($eventId)->get();
+        return $agenda->getSongs();
     }
 
     protected function loadSongs(): array
