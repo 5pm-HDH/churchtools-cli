@@ -22,10 +22,10 @@ composer.phar
 *export*.json
 
 # ignore export directories
-*report*/
-*migrate*/
-*show*/
-*export*/
+/*report*/
+/*migrate*/
+/*show*/
+/*export*/
 
 # ignore psalm-cache
 /cache/*

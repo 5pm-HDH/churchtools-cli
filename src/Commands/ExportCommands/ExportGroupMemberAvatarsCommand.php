@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Export the avatars of all members of a group.',
     hidden: false,
 )]
-class ExportGroupMemberAvatars extends ExportCommand
+class ExportGroupMemberAvatarsCommand extends ExportCommand
 {
     use LoadGroups;
 
