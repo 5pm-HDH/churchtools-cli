@@ -1,18 +1,26 @@
-# ChurchTools CLI-Tool
+# ChurchTools-CLI-Tool
+The ChurchTools-CLI-Tool provides direct data access to your ChurchTools application instance. Interaction is via easy to learn commands in a CLI application (cmd on windows, terminal on mac, bash on linux). The focus is on:
+
+- 🔍 the [display of data](#31-show-data)
+- 📃 the [export of data](#32-export-data)
+- 📈 the [creation of reports](#35-report)
+- 🔨 the [migration and import of data](#34-migrations)
+
+**Support:** If there is a functionality or command that you are missing, feel free to email me with your requirements. The implementation usually takes place in less than 3 days: lukas.dumberger@gmail.com
 
 ## Demo - Export Songs to Excel
 
 This Demo shows how to export all songs from ChurchTools with the CLI-Tool:
 ![DemoApplication](./docs/cli-demo.gif)
 
-## Prerequisites
+## 1. Prerequisites
 
 To use this CLI-Tool you need to install PHP 8.0 on your System.
 
 - Tutorial: [Install PHP on Windows](https://www.w3resource.com/php/installation/install-php-on-windows.php)
 - Tutorial: [Install PHP on Mac](https://daily-dev-tips.com/posts/installing-php-on-your-mac/)
 
-## Usage / Installation
+## 2. Usage / Installation
 
 **Option 1: Download phar**
 
@@ -32,7 +40,7 @@ Clone this repo and execute the CLI from your bash/cmd and e.q. with this comman
 php ct list
 ```
 
-## Setup
+## 3. Setup
 
 Before you can retrieve data from ChurchTools, you must set up the configuration. Call this command:
 
@@ -42,7 +50,7 @@ php ct.phar settings:setup
 
 ![Setup](./docs/setup.gif)
 
-### Show data
+### 3.1 Show data
 
 Retrieve date from ChurchTools with the `show`-commands. For example show all available calendars:
 
@@ -69,7 +77,7 @@ Other available commands:
 - `--export-json-objects` export the displayed models as raw json-objects to an json-file
 - `--add-template=[TEMPLATE_NAME]` create template from command (see section [Templates](#templates))
 
-### Export data
+### 3.2 Export data
 
 Export data to excel files with the `export`-commands. For example the `export:song-usage`-command:
 
@@ -114,7 +122,7 @@ php ct.phar export:person-tags 11,18,16
 
 Export the Tags of all Group-Members in the given groups. In the example above the export will retrieve all members from group 11, 18 and 16.
 
-### Templates
+### 3.3 Templates
 
 Templates are useful to store frequently executed commands. With the option `--add-template=[TEMPLATE-NAME]` you can
 store the command with all arguments and options to a template:
@@ -129,7 +137,7 @@ with the template-name as argument.
 - `template:delete` delete a stored export-template
 - `template:clear` deletes all templates
 
-### Migrations
+### 3.4 Migrations
 
 With the CLI tool you can also update (or migrate) data. The migrate-commands are available for this purpose:
 
@@ -148,7 +156,7 @@ With the CLI tool you can also update (or migrate) data. The migrate-commands ar
 
 Example on how to use migrations: [Example how to use migrations](/docs/examples/migrate-songs.md)
 
-### Report
+### 3.5 Report
 
 Reports generate Markdown files as output. There is currently one report available:
 
@@ -168,7 +176,7 @@ The output of the report can look like this:
 
 ![ReportResult](./docs/report-result.PNG)
 
-### Settings
+### 3.6 Settings
 
 You can list, update and edit the settings:
 
