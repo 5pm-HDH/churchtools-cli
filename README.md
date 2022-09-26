@@ -59,15 +59,16 @@ Retrieve date from ChurchTools with the `show`-commands. For example show all av
 Other available commands:
 
 - `show:api-token`
+- `show:absence` (options: `--start-date`, `--end-date`)
 - `show:calendars`
-- `show:services`
-- `show:groups`
-- `show:resources`
-- `show:bookings`
-- `show:events`
-- `show:songs`
+- `show:groups` (option: `--my-groups`)
 - `show:group-members`
-- `show:absence`
+- `show:resources`
+- `show:bookings` (options: `--start-date`, `--end-date`)
+- `show:events` (options: `--my-events`, `--start-date`, `--end-date`)
+- `show:services` (option: `--service-group-ids`)
+- `show:songs` (options: `--name`, `--should-practice`)
+- `show-song-categories`
 
 **Options:**
 
@@ -87,6 +88,15 @@ Export data to excel files with the `export`-commands. For example the `export:s
 
 - `--help` get additional context
 - `--add-template=[TEMPLATE_NAME]` create template from command (see section [Templates](#templates))
+
+#### Export Event Setlist
+
+Loads event (e.q. 281) and retrieve all songs that are linked in the event agenda. Then downloads all file-attachments
+of the selected arrangement in the right order.
+
+```bash
+php ct.phar export:event-setlist 281
+```
 
 #### Export Song-Usage
 
@@ -120,7 +130,31 @@ Detailed information: [Export-Permission](./docs/examples/permissions.md)
 php ct.phar export:person-tags 11,18,16
 ```
 
-Export the Tags of all Group-Members in the given groups. In the example above the export will retrieve all members from group 11, 18 and 16.
+Export the Tags of all Group-Members in the given groups. In the example above the export will retrieve all members from
+group 11, 18 and 16.
+
+#### Export Group Images
+
+Export the images of all accessible groups. The images will be stored in a separate folder:
+
+```bash
+php ct.phar export:group-images
+```
+
+Export only images of groups i am member of:
+
+```bash
+php ct.phar export:group-images --my-groups
+```
+
+#### Export Group Member Avatars
+
+Export the avatars of all group members and store them to a local folder. Pass as argument the group-ids you want to
+export the avatar-images from.
+
+```bash
+php ct.phar export:group-member-avatars 1192,2921
+```
 
 ### 3.3 Templates
 
