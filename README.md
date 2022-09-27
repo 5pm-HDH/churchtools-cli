@@ -178,6 +178,7 @@ With the CLI tool you can also update (or migrate) data. The migrate-commands ar
 - `php ct.phar migrate:song-arrangement-bpm`
 - `php ct.phar migrate:song-arrangement-names`
 - `php ct.phar migrate:song-should-practice-clear`
+- `php ct.phar migrate:group-member-hierarchy`
 
 **IMPORTANT:** By default all migrate commands run in "Test-Mode". This means the data is not really changed. It only simulates the commands to give you the opportunity to check if the migration updates the data correctly. To run the migration on production-data please add the option `--no-testmode`.
 
@@ -188,7 +189,9 @@ With the CLI tool you can also update (or migrate) data. The migrate-commands ar
 - `--silence` dont print migration results to cli-console
 - `--song-categories` (only for song-migrations) filter by song-categories as id-list
 
-Example on how to use migrations: [Example how to use migrations](/docs/examples/migrate-songs.md)
+Example on how to use migrations: 
+- [migrate for songs](/docs/examples/migrate-songs.md)
+- [migrate group-members](/docs/examples/migrate-group-members.md)
 
 ### 3.5 Report
 
