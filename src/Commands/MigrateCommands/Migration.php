@@ -4,6 +4,7 @@
 namespace CTExport\Commands\MigrateCommands;
 
 
+use CTApi\Models\Person;
 use CTExport\Commands\Collections\MarkdownBuilder;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -74,7 +75,11 @@ abstract class Migration
         if (is_object($model)) {
             $className = get_class($model);
             if (method_exists($model, "getId")) {
-                $className .= " (#" . $model->getId() . ")";
+                $className .= " (#" . $model->getId(); // klammer auf
+                if (is_a($model, Person::class)) {
+                    $className .= "; " . $model->getFirstName() . " " . $model->getLastName();
+                }
+                $className .= ")";                      // klammer zu
             }
             $this->log($message . " [" . $className . "]", $result);
         } else {

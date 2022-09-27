@@ -11,6 +11,7 @@ use CTExport\Commands\ExportCommands\ExportPermissionsCommand;
 use CTExport\Commands\ExportCommands\ExportPersonTagsCommand;
 use CTExport\Commands\ExportCommands\ExportServicePersonCommand;
 use CTExport\Commands\ExportCommands\ExportSongUsageCommand;
+use CTExport\Commands\MigrateCommands\MigrateGroupMemberHierarchyCommand;
 use CTExport\Commands\MigrateCommands\MigrateSongArrangementBpmCommand;
 use CTExport\Commands\MigrateCommands\MigrateSongArrangementNameCommand;
 use CTExport\Commands\MigrateCommands\MigrateSongShouldPracticeClearCommand;
@@ -81,6 +82,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new MigrateSongArrangementNameCommand());
         $this->add(new MigrateSongArrangementBpmCommand());
         $this->add(new MigrateSongShouldPracticeClearCommand());
+        $this->add(new MigrateGroupMemberHierarchyCommand());
     }
 
     public static function create(): ChurchToolsCliApplication
