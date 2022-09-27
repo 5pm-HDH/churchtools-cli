@@ -55,9 +55,13 @@ class MarkdownBuilder
         return $this;
     }
 
-    public function addListItem(string $listItem): MarkdownBuilder
+    public function addListItem(string $listItem, int $depth = 1): MarkdownBuilder
     {
-        $this->markdownContent[] = " - " . $listItem . "\n";
+        $tabs = "";
+        for ($i = 1; $i < $depth; $i++) {
+            $tabs .= "\t";
+        }
+        $this->markdownContent[] = $tabs . " - " . $listItem . "\n";
         return $this;
     }
 

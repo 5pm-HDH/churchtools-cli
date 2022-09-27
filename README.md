@@ -213,6 +213,37 @@ The output of the report can look like this:
 
 ![ReportResult](./docs/report-result.PNG)
 
+#### Report group-hierarchy
+
+The report displays the hierarchy of this group as list. It need a group-id as argument.
+
+Example output:
+
+```md
+# Group-Hierarchy Report
+
+## Group:
+
+- ID: 1141
+- GUID: [GUID]
+- Name: 5pm:  WORSHIP & PRODUCTION
+
+## Children-Groups:
+
+- 5pm:  WORSHIP & PRODUCTION (#1141)
+    - 5pm:  PRODUCTION (#1156)
+        - 5pm: PRODUCTION - Sound (#1838)
+        - 5pm: PRODUCTION - Light (#1841)
+        - 5pm: PRODUCTION - Visualisation (#1844)
+    - 5pm: WORSHIP Musiker Pool (#1469)
+    - 5pm: W&P Leitungsteam (#1825)
+
+## Parent-Groups:
+
+- 5pm:  WORSHIP & PRODUCTION (#1141)
+    - 5pm:  KERNTEAM (#1138)
+```
+
 ### 3.6 Settings
 
 You can list, update and edit the settings:
