@@ -37,10 +37,12 @@ class GroupHierarchyReport implements ReportBuilder
         $markdown->addNewLine();
 
         $markdown->addSubHeading("Children-Groups:");
+        $output->writeln("Process children-groups:");
         $this->loadAndLogChildrenGroup($this->parentGroup, $output, $markdown);
         $markdown->addNewLine();
 
         $markdown->addSubHeading("Parent-Groups:");
+        $output->writeln("Process parent-groups:");
         $this->loadAndLogParentGroup($this->parentGroup, $output, $markdown);
         $markdown->addNewLine();
 
@@ -54,7 +56,11 @@ class GroupHierarchyReport implements ReportBuilder
         $childrenGroups = $group->requestGroupChildren()?->get() ?? [];
         $groupIdentifier = $group->getName() . " (#" . $group->getId() . ")";
 
-        $output->writeln("Logged Group " . $groupIdentifier);
+        $tabs = "";
+        for ($i = 0; $i < $depth; $i++) {
+            $tabs .= "\t";
+        }
+        $output->writeln($tabs . "-" . $groupIdentifier);
         $markdown->addListItem($groupIdentifier, $depth);
 
         foreach ($childrenGroups as $childGroup) {
@@ -67,7 +73,12 @@ class GroupHierarchyReport implements ReportBuilder
         $parentGroups = $group->requestGroupParents()?->get() ?? [];
         $groupIdentifier = $group->getName() . " (#" . $group->getId() . ")";
 
-        $output->writeln("Logged Group " . $groupIdentifier);
+        $tabs = "";
+        for ($i = 0; $i < $depth; $i++) {
+            $tabs .= "\t";
+        }
+
+        $output->writeln($tabs . "-" . $groupIdentifier);
         $markdown->addListItem($groupIdentifier, $depth);
 
         foreach ($parentGroups as $parentGroup) {
