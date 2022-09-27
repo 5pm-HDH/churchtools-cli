@@ -15,6 +15,7 @@ use CTExport\Commands\MigrateCommands\MigrateGroupMemberHierarchyCommand;
 use CTExport\Commands\MigrateCommands\MigrateSongArrangementBpmCommand;
 use CTExport\Commands\MigrateCommands\MigrateSongArrangementNameCommand;
 use CTExport\Commands\MigrateCommands\MigrateSongShouldPracticeClearCommand;
+use CTExport\Commands\ReportCommands\ReportGroupHierarchyCommand;
 use CTExport\Commands\ReportCommands\ReportGroupIntersectionCommand;
 use CTExport\Commands\SettingCommands\SettingsClearCommand;
 use CTExport\Commands\SettingCommands\SettingsSetupCommand;
@@ -66,6 +67,7 @@ class ChurchToolsCliApplication extends Application
 
         // Report Commands
         $this->add(new ReportGroupIntersectionCommand());
+        $this->add(new ReportGroupHierarchyCommand());
 
         // Settings Commands
         $this->add(new SettingsShowCommand());
