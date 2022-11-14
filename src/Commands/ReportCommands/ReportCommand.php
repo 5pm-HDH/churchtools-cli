@@ -14,6 +14,11 @@ abstract class ReportCommand extends AbstractCommand
         return true;
     }
 
+    protected function canSendMail(): bool
+    {
+        return true;
+    }
+
     abstract protected function getReportBuilder(InputInterface $input): ReportBuilder;
 
     protected function execute(InputInterface $input, OutputInterface $output)

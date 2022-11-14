@@ -6,6 +6,7 @@ namespace CTExport\Commands\Traits;
 
 use CTApi\Models\Group;
 use CTApi\Models\PersonGroup;
+use CTApi\Requests\GroupMeetingRequest;
 use CTApi\Requests\GroupRequest;
 use CTApi\Requests\PersonRequest;
 
@@ -70,4 +71,11 @@ trait LoadGroups
         return Group::createModelFromData(["id" => $groupId])->requestMembers()?->get() ?? [];
     }
 
+    protected function loadGroupMeetings(int $groupId, string $startDate, string $endDate): array
+    {
+        return GroupMeetingRequest::forGroup($groupId)
+            ->where("start_date", $startDate)
+            ->where("end_date", $endDate)
+            ->get();
+    }
 }

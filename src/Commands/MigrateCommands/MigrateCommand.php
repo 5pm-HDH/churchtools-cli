@@ -15,6 +15,7 @@ abstract class MigrateCommand extends AbstractCommand
 {
     const INPUT_OPTION_TESTMODE = "testmode";
     const INPUT_OPTION_SILENCE = "silence";
+    const INPUT_OPTION_IGNORE_SKIPPED = "ignore-skipped";
 
     private array $migrationResultCount = [
         Migration::RESULT_SUCCESS => 0,
@@ -28,6 +29,11 @@ abstract class MigrateCommand extends AbstractCommand
         return true;
     }
 
+    protected function canSendMail(): bool
+    {
+        return true;
+    }
+
     abstract protected function collectModels(InputInterface $input): array;
 
     abstract protected function getMigration(): Migration;
@@ -37,12 +43,15 @@ abstract class MigrateCommand extends AbstractCommand
         parent::configure();
         $this->addOption(self::INPUT_OPTION_TESTMODE, null, InputOption::VALUE_NEGATABLE, "Execute migration without editing data in production.", true);
         $this->addOption(self::INPUT_OPTION_SILENCE, null, InputOption::VALUE_NEGATABLE, "Prevent display migration log to console.", false);
+        $this->addOption(self::INPUT_OPTION_IGNORE_SKIPPED, null, InputOption::VALUE_NEGATABLE, "Ignore skipped migrations and prevent generation of log.", false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $isTestrun = $input->getOption(self::INPUT_OPTION_TESTMODE);
         $isSilence = $input->getOption(self::INPUT_OPTION_SILENCE);
+        $isIgnoreSkipped = $input->getOption(self::INPUT_OPTION_IGNORE_SKIPPED);
+
         $output->writeln("Execute Migration " . ($isTestrun ? "as test-run." : "on production data."));
 
         $models = $this->collectModels($input);
@@ -78,6 +87,16 @@ abstract class MigrateCommand extends AbstractCommand
         $output->writeln("\t- Skipped: " . $this->migrationResultCount[Migration::RESULT_SKIPPED]);
         $output->writeln("\t- Failed: " . $this->migrationResultCount[Migration::RESULT_FAILED]);
         $output->writeln("\t- Undefined: " . $this->migrationResultCount[Migration::RESULT_UNDEFINED]);
+
+        // Skip Log-Generation, if only skipped result.
+        if (
+            $isIgnoreSkipped &&
+            $this->migrationResultCount[Migration::RESULT_SUCCESS] == 0 &&
+            $this->migrationResultCount[Migration::RESULT_FAILED] == 0 &&
+            $this->migrationResultCount[Migration::RESULT_UNDEFINED] == 0) {
+            $output->writeln("\nMigration contains only skipped result. Skip generation of log-file.");
+            return parent::execute($input, $output);
+        }
 
         $sortedMarkdownFile = MarkdownBuilder::clone($markdownFile);
         $sortedMarkdownFile->sortMarkdown();

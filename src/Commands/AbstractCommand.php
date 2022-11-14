@@ -6,6 +6,7 @@ namespace CTExport\Commands;
 
 use CTExport\ApplicationSettings;
 use CTExport\ExportTemplate\ExportTemplate;
+use CTExport\Mail\MailBuilder;
 use Phar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -18,6 +19,9 @@ abstract class AbstractCommand extends Command
 {
     const START_DATE = "start-date";
     const END_DATE = "end-date";
+    const MAIL_TO = "mail-to";
+
+    private array $createdFiles = [];
 
     protected function doSetupChurchToolsApi(): bool
     {
@@ -34,10 +38,18 @@ abstract class AbstractCommand extends Command
         return false;
     }
 
+    protected function canSendMail(): bool
+    {
+        return false;
+    }
+
     protected function configure()
     {
-        if($this->enableAddTemplate()){
+        if ($this->enableAddTemplate()) {
             $this->addOption(ExportTemplate::COMMAND_OPTION_ADD_TEMPLATE, null, InputOption::VALUE_REQUIRED, "Create new Template for export.");
+        }
+        if ($this->canSendMail()) {
+            $this->addOption(self::MAIL_TO, null, InputOption::VALUE_REQUIRED, "Send Mail to given Address.");
         }
     }
 
@@ -129,6 +141,20 @@ abstract class AbstractCommand extends Command
             $output->writeln("Template '" . $templateName . "' successfully stored.");
         }
 
+        // SEND MAIL
+        if ($this->canSendMail() && !is_null($input->getOption(self::MAIL_TO))) {
+            $mailTo = $input->getOption(self::MAIL_TO);
+            $mailToAddresses = explode(",", $mailTo);
+
+            if (empty($this->createdFiles)) {
+                $output->writeln("No files created by command. Skip email dispatch.");
+            } else {
+                $output->writeln("Send Mail with attachments.");
+                MailBuilder::forAttachments($this->createdFiles, $mailToAddresses)->send();
+                $output->writeln("Successfully send mail.");
+            }
+        }
+
         return Command::SUCCESS;
     }
 
@@ -154,7 +180,9 @@ abstract class AbstractCommand extends Command
         if ($note != null) {
             $name .= '-' . $note;
         }
-        return $name . '.' . $fileEnding;
+        $filePath = $name . '.' . $fileEnding;
+        $this->createdFiles[] = $filePath;
+        return $filePath;
     }
 
     public function createFolderPath(?string $note = null): string
@@ -164,7 +192,7 @@ abstract class AbstractCommand extends Command
         if ($note != null) {
             $folderName .= '-' . $note;
         }
-        if(!file_exists($folderName)){
+        if (!file_exists($folderName)) {
             mkdir($folderName);
         }
 

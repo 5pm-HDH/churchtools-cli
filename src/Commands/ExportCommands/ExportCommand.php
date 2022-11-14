@@ -5,10 +5,7 @@ namespace CTExport\Commands\ExportCommands;
 
 
 use CTExport\Commands\AbstractCommand;
-use CTExport\ExportTemplate\ExportTemplate;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class ExportCommand extends AbstractCommand
@@ -18,6 +15,10 @@ abstract class ExportCommand extends AbstractCommand
         return true;
     }
 
+    protected function canSendMail(): bool
+    {
+        return true;
+    }
 
     protected function configure()
     {
