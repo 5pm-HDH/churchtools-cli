@@ -15,6 +15,12 @@ class ApplicationSettings
     public const SETTING_CT_PASSWORD = "CT_PASSWORD";
     public const SETTING_CT_TOKEN = "CT_TOKEN";
 
+    public const SETTING_MAIL_HOST = "MAIL_HOST";
+    public const SETTING_MAIL_USER = "MAIL_USER";
+    public const SETTING_MAIL_PASSWORD = "MAIL_PASSWORD";
+    public const SETTING_MAIL_PORT = "MAIL_PORT";
+    public const SETTING_MAIL_FROM = "MAIL_FROM";
+
     private static string $SETTINGS_FOLDER = "config";
     private static string $SETTINGS_FILE = "/settings.json";
 
@@ -27,6 +33,11 @@ class ApplicationSettings
             self::SETTING_CT_EMAIL,
             self::SETTING_CT_PASSWORD,
             self::SETTING_CT_TOKEN,
+            self::SETTING_MAIL_HOST,
+            self::SETTING_MAIL_USER,
+            self::SETTING_MAIL_PASSWORD,
+            self::SETTING_MAIL_PORT,
+            self::SETTING_MAIL_FROM,
         ];
     }
 

@@ -20,6 +20,7 @@ use CTExport\Commands\ReportCommands\ReportGroupHierarchyCommand;
 use CTExport\Commands\ReportCommands\ReportGroupIntersectionCommand;
 use CTExport\Commands\SettingCommands\SettingsClearCommand;
 use CTExport\Commands\SettingCommands\SettingsSetupCommand;
+use CTExport\Commands\SettingCommands\SettingsSetupMailCommand;
 use CTExport\Commands\SettingCommands\SettingsShowCommand;
 use CTExport\Commands\ShowCommands\ShowAbsencesCommand;
 use CTExport\Commands\ShowCommands\ShowApiTokenCommand;
@@ -75,6 +76,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new SettingsShowCommand());
         $this->add(new SettingsSetupCommand());
         $this->add(new SettingsClearCommand());
+        $this->add(new SettingsSetupMailCommand());
 
         // Template Commands
         $this->add(new TemplateListCommand());

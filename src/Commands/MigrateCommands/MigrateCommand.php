@@ -28,6 +28,11 @@ abstract class MigrateCommand extends AbstractCommand
         return true;
     }
 
+    protected function canSendMail(): bool
+    {
+        return true;
+    }
+
     abstract protected function collectModels(InputInterface $input): array;
 
     abstract protected function getMigration(): Migration;
