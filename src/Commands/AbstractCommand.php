@@ -146,9 +146,13 @@ abstract class AbstractCommand extends Command
             $mailTo = $input->getOption(self::MAIL_TO);
             $mailToAddresses = explode(",", $mailTo);
 
-            $output->writeln("Send Mail with attachments.");
-            MailBuilder::forAttachments($this->createdFiles, $mailToAddresses)->send();
-            $output->writeln("Successfully send mail.");
+            if (empty($this->createdFiles)) {
+                $output->writeln("No files created by command. Skip email dispatch.");
+            } else {
+                $output->writeln("Send Mail with attachments.");
+                MailBuilder::forAttachments($this->createdFiles, $mailToAddresses)->send();
+                $output->writeln("Successfully send mail.");
+            }
         }
 
         return Command::SUCCESS;
