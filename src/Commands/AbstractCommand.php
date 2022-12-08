@@ -90,9 +90,14 @@ abstract class AbstractCommand extends Command
     protected function getOptionAsDate(InputInterface $input, string $parameter): string
     {
         $dateValue = $input->getOption($parameter);
+        return $this->castDate($dateValue);
+    }
 
-        if (is_numeric(strtotime($dateValue))) {
-            return $dateValue;
+    protected function castDate(string $dateValue): string
+    {
+        $dateAsInt = strtotime($dateValue);
+        if (is_numeric($dateAsInt)) {
+            return date("Y-m-d", $dateAsInt);
         } else {
             throw new InvalidArgumentException(sprintf("The input %s is not a valid date.", $dateValue));
         }

@@ -37,7 +37,11 @@ class ExportCheckInCommand extends ExportCommand
         $endDate = $this->getOptionEndDate($input);
         $groupId = (int)$input->getArgument(self::GROUP_ID);
 
+        $output->writeln("Load CheckIn-Data for period " . $startDate . " - " . $endDate . " and group-id " . $groupId);
+
         $meetings = $this->loadGroupMeetings($groupId, $startDate, $endDate);
+        $output->writeln("Found " . sizeof($meetings) . " GroupMeetings.");
+
 
         if (empty($meetings)) {
             $output->writeln("0 Groupmeetings loaded for Start- / End-Date and Calendars.");
@@ -48,18 +52,6 @@ class ExportCheckInCommand extends ExportCommand
         $fileName = $this->createSpreadsheetPath();
 
         $spreadsheet->build($fileName);
-
-        /*$output->writeln("Load Event-Data:");
-        $eventCollection = new EventCollection($meetings);
-        $songSpreadsheet = $eventCollection->createSongTable($output);
-
-        $fileName = $this->createSpreadsheetPath();
-        $songSpreadsheet->withCountColumn()
-            ->doFlipAxes()
-            ->withDataColumns()
-            ->build($fileName);
-        $output->writeln("Stored export to: " . $fileName);*/
-
         return parent::execute($input, $output);
     }
 }
