@@ -4,11 +4,13 @@
 namespace CTExport\Commands\Traits;
 
 
+use CTApi\CTClient;
 use CTApi\Models\Group;
 use CTApi\Models\PersonGroup;
 use CTApi\Requests\GroupMeetingRequest;
 use CTApi\Requests\GroupRequest;
 use CTApi\Requests\PersonRequest;
+use CTApi\Utils\CTResponseUtil;
 
 trait LoadGroups
 {
@@ -77,5 +79,12 @@ trait LoadGroups
             ->where("start_date", $startDate)
             ->where("end_date", $endDate)
             ->get();
+    }
+
+    protected function loadStatuses(): array
+    {
+        $ctClient = CTClient::getClient();
+        $response = $ctClient->get('/api/statuses');
+        return CTResponseUtil::dataAsArray($response);
     }
 }

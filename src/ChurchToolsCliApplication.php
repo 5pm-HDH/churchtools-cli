@@ -10,6 +10,7 @@ use CTExport\Commands\ExportCommands\ExportGroupImagesCommand;
 use CTExport\Commands\ExportCommands\ExportGroupMemberAvatarsCommand;
 use CTExport\Commands\ExportCommands\ExportPermissionsCommand;
 use CTExport\Commands\ExportCommands\ExportPersonTagsCommand;
+use CTExport\Commands\ExportCommands\ExportRoundBirthdays;
 use CTExport\Commands\ExportCommands\ExportServicePersonCommand;
 use CTExport\Commands\ExportCommands\ExportSongUsageCommand;
 use CTExport\Commands\MigrateCommands\MigrateGroupMemberHierarchyCommand;
@@ -33,6 +34,7 @@ use CTExport\Commands\ShowCommands\ShowResourcesCommand;
 use CTExport\Commands\ShowCommands\ShowServicesCommand;
 use CTExport\Commands\ShowCommands\ShowSongCategoriesCommand;
 use CTExport\Commands\ShowCommands\ShowSongsCommand;
+use CTExport\Commands\ShowCommands\ShowStatusesCommand;
 use CTExport\Commands\TemplateCommands\TemplateClearCommand;
 use CTExport\Commands\TemplateCommands\TemplateDeleteCommand;
 use CTExport\Commands\TemplateCommands\TemplateListCommand;
@@ -57,6 +59,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new ShowSongCategoriesCommand());
         $this->add(new ShowGroupMembersCommand());
         $this->add(new ShowAbsencesCommand());
+        $this->add(new ShowStatusesCommand());
 
         // Export Commands
         $this->add(new ExportSongUsageCommand());
@@ -67,6 +70,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new ExportGroupImagesCommand());
         $this->add(new ExportEventSetlistCommand());
         $this->add(new ExportCheckInCommand());
+        $this->add(new ExportRoundBirthdays());
 
         // Report Commands
         $this->add(new ReportGroupIntersectionCommand());
