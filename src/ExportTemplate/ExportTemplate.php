@@ -16,19 +16,27 @@ class ExportTemplate
      * <li>command</li>
      * <li>argument</li>
      * <li>options</li>
+     * @param bool $showAll determine if show all columns
      * @return array
      */
-    public static function loadAllTemplatesAsTable(): array
+    public static function loadAllTemplatesAsTable(bool $showAll): array
     {
         $table = [];
         $templates = self::loadAllTemplates();
         foreach ($templates as $name => $content) {
-            $table[] = [
-                $name ?? "-",
-                $content["arguments"]["command"] ?? "-",
-                self::parseArgumentOrOptionForTable($content["arguments"]),
-                self::parseArgumentOrOptionForTable($content["options"])
-            ];
+            if ($showAll) {
+                $table[] = [
+                    $name ?? "-",
+                    $content["arguments"]["command"] ?? "-",
+                    self::parseArgumentOrOptionForTable($content["arguments"]),
+                    self::parseArgumentOrOptionForTable($content["options"])
+                ];
+            } else {
+                $table[] = [
+                    $name ?? "-",
+                    $content["arguments"]["command"] ?? "-"
+                ];
+            }
         }
         return $table;
     }
