@@ -422,4 +422,23 @@ class TableBuilder
             }
         );
     }
+
+    public static function forStatuses(array $statuses)
+    {
+        return new TableBuilder(
+            ["Id", "Name", "isMember", "isSearchable", "SecurityLevelId", "Shorty", "Sort-Key"],
+            $statuses,
+            function (array $status) {
+                return [
+                    $status["id"],
+                    $status["name"],
+                    $status["isMember"],
+                    $status["isSearchable"],
+                    $status["securityLevelId"],
+                    $status["shorty"],
+                    $status["sortKey"],
+                ];
+            }
+        );
+    }
 }

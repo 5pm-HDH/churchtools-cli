@@ -33,6 +33,7 @@ use CTExport\Commands\ShowCommands\ShowResourcesCommand;
 use CTExport\Commands\ShowCommands\ShowServicesCommand;
 use CTExport\Commands\ShowCommands\ShowSongCategoriesCommand;
 use CTExport\Commands\ShowCommands\ShowSongsCommand;
+use CTExport\Commands\ShowCommands\ShowStatusesCommand;
 use CTExport\Commands\TemplateCommands\TemplateClearCommand;
 use CTExport\Commands\TemplateCommands\TemplateDeleteCommand;
 use CTExport\Commands\TemplateCommands\TemplateListCommand;
@@ -57,6 +58,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new ShowSongCategoriesCommand());
         $this->add(new ShowGroupMembersCommand());
         $this->add(new ShowAbsencesCommand());
+        $this->add(new ShowStatusesCommand());
 
         // Export Commands
         $this->add(new ExportSongUsageCommand());
