@@ -15,7 +15,7 @@ This Demo shows how to export all songs from ChurchTools with the CLI-Tool:
 
 ## 1. Prerequisites
 
-To use this CLI-Tool you need to install PHP 8.0 on your System.
+To use this CLI-Tool you need to install PHP 8.0 on your System. For the CLI tool to function correctly and send HTTP requests, it is necessary to activate the curl extension in the php.ini configuration file.
 
 - Tutorial: [Install PHP on Windows](https://www.w3resource.com/php/installation/install-php-on-windows.php)
 - Tutorial: [Install PHP on Mac](https://daily-dev-tips.com/posts/installing-php-on-your-mac/)
