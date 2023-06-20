@@ -34,10 +34,6 @@ abstract class MigrateCommand extends AbstractCommand
         return true;
     }
 
-    abstract protected function collectModels(InputInterface $input): array;
-
-    abstract protected function getMigration(): Migration;
-
     protected function configure()
     {
         parent::configure();
@@ -79,6 +75,7 @@ abstract class MigrateCommand extends AbstractCommand
                 $this->migrationResultCount[$resultCode]++;
             }
         }
+        $migration->postMigration();
 
 
         // Migration Results
@@ -118,6 +115,10 @@ abstract class MigrateCommand extends AbstractCommand
 
         return parent::execute($input, $output);
     }
+
+    abstract protected function collectModels(InputInterface $input): array;
+
+    abstract protected function getMigration(): Migration;
 
     private function writeResultToMarkdown(MarkdownBuilder $markdownFile, bool $isTestMode)
     {
