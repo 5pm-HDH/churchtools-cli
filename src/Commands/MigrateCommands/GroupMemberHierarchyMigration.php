@@ -13,9 +13,11 @@ class GroupMemberHierarchyMigration extends Migration
 {
     private $parentGroupMemberPersons = [];
     private $parentGroupMemberPersonIds = [];
+    private $redundantParentGroupMemberPersonIds = [];
 
     public function __construct(
-        private Group $parentGroup
+        private Group $parentGroup,
+        private bool $removeRedundantMembersFromParentGroup
     )
     {
         $this->parentGroupMemberPersons = $this->getPersonsOfGroup($this->parentGroup);
@@ -24,6 +26,7 @@ class GroupMemberHierarchyMigration extends Migration
         }, $this->parentGroupMemberPersons), function ($id) {
             return !is_null($id);
         });
+        $this->redundantParentGroupMemberPersonIds = array_merge($this->parentGroupMemberPersonIds);
     }
 
     private function getPersonsOfGroup(Group $group, ?int &$statusIds = null): array
@@ -82,6 +85,12 @@ class GroupMemberHierarchyMigration extends Migration
             return $this->logModel("Id of person is null.", $person, Migration::RESULT_FAILED);
         }
 
+        if (in_array($person->getId(), $this->redundantParentGroupMemberPersonIds)) {
+            $this->redundantParentGroupMemberPersonIds = array_filter($this->redundantParentGroupMemberPersonIds, function ($personId) use ($person) {
+                return $personId != $person->getId();
+            });
+        }
+
         if (in_array($person->getId(), $this->parentGroupMemberPersonIds)) {
             return $this->logModel("Person is already in parent-group.", $person, Migration::RESULT_SKIPPED);
         }
@@ -95,6 +104,21 @@ class GroupMemberHierarchyMigration extends Migration
             return $this->logModel("Successfully added person to parent-group.", $person, Migration::RESULT_SUCCESS);
         } catch (CTRequestException $exception) {
             return $this->logModel("Error when tried to add person: " . $exception->getMessage(), $person, Migration::RESULT_FAILED);
+        }
+    }
+
+    public function postMigration()
+    {
+        parent::postMigration();
+        //echo "REDUNDANT PARENT GROUP MEMBER PERSON IDS:\n";
+        //print_r($this->redundantParentGroupMemberPersonIds);
+        if ($this->removeRedundantMembersFromParentGroup) {
+            foreach ($this->redundantParentGroupMemberPersonIds as $redundantPersonId) {
+                if (!$this->isTestRun()) {
+                    GroupMemberRequest::removeMember($this->parentGroup->getIdAsInteger(), $redundantPersonId);
+                }
+                $this->log("Successfully removed person from parent-group: " . $redundantPersonId, Migration::RESULT_SUCCESS);
+            }
         }
     }
 

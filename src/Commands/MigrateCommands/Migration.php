@@ -25,6 +25,11 @@ abstract class Migration
      */
     abstract public function migrateModel($model): int|array;
 
+    public function postMigration()
+    {
+        // undefined
+    }
+
     public function setTestRun(bool $isTestRun)
     {
         $this->isTestRun = $isTestRun;
@@ -43,6 +48,24 @@ abstract class Migration
     protected function isTestRun(): bool
     {
         return $this->isTestRun;
+    }
+
+    protected function logModel(string $message, $model, int $result = self::RESULT_UNDEFINED): int
+    {
+        if (is_object($model)) {
+            $className = get_class($model);
+            if (method_exists($model, "getId")) {
+                $className .= " (#" . $model->getId(); // klammer auf
+                if (is_a($model, Person::class)) {
+                    $className .= "; " . $model->getFirstName() . " " . $model->getLastName();
+                }
+                $className .= ")";                      // klammer zu
+            }
+            $this->log($message . " [" . $className . "]", $result);
+        } else {
+            $this->log($message, $result);
+        }
+        return $result;
     }
 
     protected function log(string $message, int $result = self::RESULT_UNDEFINED): int
@@ -66,24 +89,6 @@ abstract class Migration
         }
         if (!is_null(($this->output))) {
             $this->output->writeln($message);
-        }
-        return $result;
-    }
-
-    protected function logModel(string $message, $model, int $result = self::RESULT_UNDEFINED): int
-    {
-        if (is_object($model)) {
-            $className = get_class($model);
-            if (method_exists($model, "getId")) {
-                $className .= " (#" . $model->getId(); // klammer auf
-                if (is_a($model, Person::class)) {
-                    $className .= "; " . $model->getFirstName() . " " . $model->getLastName();
-                }
-                $className .= ")";                      // klammer zu
-            }
-            $this->log($message . " [" . $className . "]", $result);
-        } else {
-            $this->log($message, $result);
         }
         return $result;
     }
