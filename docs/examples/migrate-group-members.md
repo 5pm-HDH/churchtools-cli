@@ -4,6 +4,9 @@ Es bleibt eine ständige Frage im ChurchTools-Forum: [Warum werden die Teilnehme
 
 Allerdings gibt es manche fälle in denen es schon geschickt wäre, wenn eine Gruppe die Mitglieder mehrere anderen Gruppen zusammenfassen würden. Nur ein [Beispiel aus dem ChurchTools Forum.](https://forum.church.tools/topic/8808/untergeordnete-gruppen-im-chat?_=1664277637704)
 
+> [!NOTE]
+> Seit dem Release der Version 3.105 (Jan 2024) können Teilnehmer über „Automatische Mitgliedschaften“ verwaltet werden. Dieses Feature ersetzt diese Funktion der ChurchTools CLI. [Mehr Informationen im ChurchTools Blog Post.](https://blog.church.tools/blog/v3-105-automatische-mitgliedschaften-und-qr-codes-fuer-check-in/) 
+
 **Background aus unserer Gemeinde:** Wir haben für den Gottesdienst verschiedene Dienste, die sich jeweils in eigenen Gruppen (auch Chat-Gruppen) organisieren. Den Event-Chat nutzen wir um den Gottesdienst zu organisieren. Trotzdem brauchen wir eine Chat-Gruppe in der wir News an alle Gottesdienstmitarbeiter schicken. Damit wir diese "große Chat-Gruppe" mit allen anderen Gruppen synchronisiert halten nutzen wir das selbst entwickelte ChurchTools-CLI Tool.
 
 **Tipp:** Wenn du bisher noch nicht mit dem CT-CLI (ChurchTools CLI-Tool) gearbeitet hast, lohnt es sich vielleicht kurz
