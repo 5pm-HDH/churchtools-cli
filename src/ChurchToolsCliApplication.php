@@ -6,6 +6,7 @@ namespace CTExport;
 
 use CTExport\Commands\ExportCommands\ExportCheckInCommand;
 use CTExport\Commands\ExportCommands\ExportEventSetlistCommand;
+use CTExport\Commands\ExportCommands\ExportFlyerCommand;
 use CTExport\Commands\ExportCommands\ExportGroupImagesCommand;
 use CTExport\Commands\ExportCommands\ExportGroupMemberAvatarsCommand;
 use CTExport\Commands\ExportCommands\ExportPermissionsCommand;
@@ -69,6 +70,7 @@ class ChurchToolsCliApplication extends Application
         $this->add(new ExportGroupMemberAvatarsCommand());
         $this->add(new ExportGroupImagesCommand());
         $this->add(new ExportEventSetlistCommand());
+        $this->add(new ExportFlyerCommand());
         $this->add(new ExportCheckInCommand());
         $this->add(new ExportRoundBirthdays());
 

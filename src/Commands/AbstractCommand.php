@@ -178,6 +178,16 @@ abstract class AbstractCommand extends Command
         return $this->createExportFilePath("md", $note);
     }
 
+    protected function createWordPath(?string $note = null): string
+    {
+        return $this->createExportFilePath("docx", $note);
+    }
+
+    protected function createPdfPath(?string $note = null): string
+    {
+        return $this->createExportFilePath("pdf", $note);
+    }
+
     private function createExportFilePath(string $fileEnding, ?string $note = null): string
     {
         $name = date("Y-m-d-H-i-s");
